@@ -1,12 +1,8 @@
 # Solana CLI
 
-## Getting started with the Solana CLI:
+## Install & Setup:
 
-### 1. Download the Solana Tool Suite (CLI)
-
-Install the Solana Tool Suite by following [these instructions](https://docs.solana.com/cli/install-solana-cli-tools).
-
-### 2. Configure an account for your device/application
+Install the Solana Tool Suite by following [these instructions](https://docs.solana.com/cli/install-solana-cli-tools).   
 
 Once the CLI is installed, we must create an account. We do this by generating a new **public/private key pair**.
 ```shell
@@ -28,9 +24,24 @@ solana config set --url <network_url>
 (main net -- production)        https://api.mainnet-beta.solana.com
 ```
 
-### 3. Build a smart contract program
+## Exploring:
 
-### 4. Deploy it!
+**You can see all commands supported by the Solana CLI by just entering:**
+```shell
+solana
+```
+
+Here's a few examples:   
+
+To deploy applications on Solana, you need to pay `rent`. This costs a small amount of `lamports`(SOL). On the `dev` network, you can request an `airdrop` of "test money" to deploy to the dev net:
+```shell
+solana airdrop 1
+```
+
+Check the balance of your account:
+```shell
+solana balance
+```
 
 ## The Dockerfile:
 
