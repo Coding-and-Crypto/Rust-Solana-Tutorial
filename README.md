@@ -7,7 +7,7 @@
 solana-cli
 ```
 
-### Tutorials #2 - #5
+### Tutorial #2
 ```shell
-TBD
+hello-solana
 ```
