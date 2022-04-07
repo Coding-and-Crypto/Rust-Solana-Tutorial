@@ -47,7 +47,12 @@ solana balance
 
 Provided is a Dockerfile used to create the following image: [jpcaulfi/solana-alpine](https://hub.docker.com/repository/docker/jpcaulfi/solana-alpine).   
 
-You can leverage this image to create a Docker container to conduct Solana business out of - such as deploying and even hosting/running an application.
+You can leverage this image to create a Docker container to conduct Solana business out of - such as deploying and even hosting/running an application.   
+
+This image contains:
+```shell
+node    rust    solana
+```
 
 You can run these commands in the container or write a Dockerfile:
 ```shell
