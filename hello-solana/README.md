@@ -4,6 +4,7 @@ A simple on-chain Solana program written in Rust.
 
 ```shell
 cargo build-bpf
+solana program deploy target/deploy/hello_solana.so
 ```
 
 ```shell
