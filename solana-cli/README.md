@@ -48,3 +48,11 @@ solana balance
 Provided is a Dockerfile used to create the following image: [jpcaulfi/solana-alpine](https://hub.docker.com/repository/docker/jpcaulfi/solana-alpine).   
 
 You can leverage this image to create a Docker container to conduct Solana business out of - such as deploying and even hosting/running an application.
+
+You can run these commands in the container or write a Dockerfile:
+```shell
+solana-keygen new --no-bip39-passphrase
+solana config set --keypair /root/.config/solana/id.json
+solana config set --url http://api.devnet.solana.com
+solana airdrop 2
+```
