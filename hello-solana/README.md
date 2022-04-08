@@ -13,7 +13,7 @@ solana airdrop 1
 
 npm install
 npm run build:program-rust
-solana program deploy dist/program/helloworld.so
+solana program deploy dist/program/hello_solana.so
 npm run start
 
 solana program show --programs
