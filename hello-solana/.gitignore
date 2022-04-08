@@ -1,1 +1,2 @@
-program/target/
+node_modules/
+src/program/target/
