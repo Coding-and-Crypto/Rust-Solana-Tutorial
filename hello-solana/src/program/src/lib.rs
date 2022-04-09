@@ -16,6 +16,6 @@ fn process_instruction(
     instruction_data: &[u8],
 ) -> ProgramResult {
     
-    msg!("Here's where business logic goes.");
+    msg!("Hello Solana! (From Rust!)");
     Ok(())
 }
