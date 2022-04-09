@@ -19,6 +19,6 @@ COPY package.json package.json
 
 RUN npm install &&\
     npm run build:program &&\
-    solana program deploy dist/program/helloworld.so
+    solana program deploy dist/program/hello_solana.so
 
 ENTRYPOINT npm run start
