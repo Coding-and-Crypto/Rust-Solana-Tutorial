@@ -25,6 +25,22 @@ async function getConfig(): Promise<any> {
 }
 
 /**
+ * Load and parse the Solana CLI config file to determine which RPC url to use
+ */
+ export async function getRpcUrl(): Promise<string> {
+  try {
+    const config = await getConfig();
+    if (!config.json_rpc_url) throw new Error('Missing RPC URL');
+    return config.json_rpc_url;
+  } catch (err) {
+    console.warn(
+      'Failed to read RPC url from CLI config file, falling back to localhost',
+    );
+    return 'http://127.0.0.1:8899';
+  }
+}
+
+/**
  * Load and parse the Solana CLI config file to determine which payer to use
  */
 export async function getPayer(): Promise<Keypair> {
