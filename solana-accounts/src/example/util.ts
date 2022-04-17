@@ -19,7 +19,7 @@ export async function airdrop(publicKey: PublicKey,
       publicKey,
       amount_in_sol * LAMPORTS_PER_SOL,
     );
-    await connection.confirmTransaction(airdropRequest);
+    return connection.confirmTransaction(airdropRequest);
   }
   
   
@@ -43,7 +43,8 @@ export async function execute_program(keyPair: Keypair,
     programId,
     data: Buffer.alloc(0),
   });
-  await sendAndConfirmTransaction(
+  console.log("Sending transaction to: " + programId);
+  return sendAndConfirmTransaction(
     connection,
     new Transaction().add(instruction),
     [keyPair],

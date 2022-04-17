@@ -21,13 +21,13 @@ async function main() {
   let guests_report_program_id = await get_hotel_program_id("guests_report");
 
   const exampleKeypair = Keypair.generate();
-  airdrop(exampleKeypair.publicKey, 1, connection);
+  await airdrop(exampleKeypair.publicKey, 1, connection);
   print_welcome();
 
   /*
   Print the guest report.
   */
-  execute_program(exampleKeypair, 
+  await execute_program(exampleKeypair, 
                   guests_report_program_id,
                   connection);
 
@@ -36,14 +36,14 @@ async function main() {
     /*
     Print the guest report.
     */
-    execute_program(exampleKeypair, 
+    await execute_program(exampleKeypair, 
                     check_in_program_id,
                     connection);
 
     /*
     Print the guest report.
     */
-    execute_program(exampleKeypair, 
+    await execute_program(exampleKeypair, 
                     guests_report_program_id,
                     connection);
   }
