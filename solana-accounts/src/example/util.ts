@@ -36,17 +36,49 @@ export async function get_hotel_program_id(program: string): Promise<PublicKey> 
 
 
 export async function execute_program(keyPair: Keypair, 
-                                      programId: PublicKey, 
+                                      instruction: TransactionInstruction,
                                       connection: Connection) {
-  const instruction = new TransactionInstruction({
-    keys: [{pubkey: keyPair.publicKey, isSigner: false, isWritable: true}],
-    programId,
-    data: Buffer.alloc(0),
-  });
-  console.log("Sending transaction to: " + programId);
-  return sendAndConfirmTransaction(
-    connection,
-    new Transaction().add(instruction),
-    [keyPair],
-  );
+    return sendAndConfirmTransaction(
+        connection,
+        new Transaction().add(instruction),
+        [keyPair],
+    );
+}
+
+
+export async function get_guests_list(keyPair: Keypair, 
+                                      programId: PublicKey,
+                                      connection: Connection) {
+    console.log("Sending transaction to Guests List Report program (id: {})", programId);
+    console.log("   to view the Guests List...");
+    let instruction = new TransactionInstruction({
+        keys: [{pubkey: keyPair.publicKey, isSigner: false, isWritable: true}],
+        programId,
+        data: Buffer.alloc(0), // Not used.
+    });
+    execute_program(keyPair, instruction, connection);
+}
+
+
+export async function run_check_in_simulation(keyPair: Keypair, 
+                                              programId: PublicKey, 
+                                              connection: Connection) {
+    
+    console.log("Sending multiple transactions to Check-in program (id: {})", programId);
+    console.log("   to simulate people checking in...");
+    
+    const numberOfSimulations = Math.floor(Math.random() * (5 - 1 + 1) + 1);
+    const roomNumber = Math.floor(Math.random() * (106 - 100 + 1) + 100);
+
+    let instruction = new TransactionInstruction({
+        keys: [{pubkey: keyPair.publicKey, isSigner: false, isWritable: true}],
+        programId,
+        data: Buffer.alloc(roomNumber),
+    });
+
+    for (let i = 0; i < numberOfSimulations; i++) {
+        // TODO: Pass instructions
+        execute_program(keyPair, instruction, connection);
+    }
+    console.log("Success");
 }

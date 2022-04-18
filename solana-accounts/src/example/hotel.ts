@@ -8,7 +8,8 @@ import {
 import {
   airdrop,
   get_hotel_program_id,
-  execute_program,
+  get_guests_list,
+  run_check_in_simulation,
 } from './util';
 
   
@@ -27,23 +28,23 @@ async function main() {
   /*
   Print the guest report.
   */
-  await execute_program(exampleKeypair, 
+  await get_guests_list(exampleKeypair, 
                   guests_report_program_id,
                   connection);
 
   for (var _i = 0; _i < 4; _i++) {
 
     /*
-    Print the guest report.
+    Check in some people to the hotel.
     */
-    await execute_program(exampleKeypair, 
+    await run_check_in_simulation(exampleKeypair, 
                     check_in_program_id,
                     connection);
 
     /*
     Print the guest report.
     */
-    await execute_program(exampleKeypair, 
+    await get_guests_list(exampleKeypair, 
                     guests_report_program_id,
                     connection);
   }
