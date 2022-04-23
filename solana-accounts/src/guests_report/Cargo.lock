@@ -1093,6 +1093,8 @@ dependencies = [
 name = "guests_report"
 version = "0.1.0"
 dependencies = [
+ "borsh",
+ "borsh-derive",
  "solana-program",
  "solana-program-test",
  "solana-sdk",
