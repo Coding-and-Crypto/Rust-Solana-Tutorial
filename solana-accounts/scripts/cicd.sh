@@ -1,6 +1,6 @@
 #! /bin/bash
 
-SOLANA_PROGRAMS=("guests_list" "guests_report" "check_in")
+SOLANA_PROGRAMS=("guests_report" "check_in")
 
 case $1 in
     "reset")
