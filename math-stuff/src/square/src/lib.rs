@@ -10,8 +10,8 @@ use solana_program::{
 
 
 #[derive(BorshSerialize, BorshDeserialize, Debug)]
-pub struct MathStuff {
-    pub square: i32,
+pub struct MathStuffSquare {
+    pub square: u32,
 }
 
 
@@ -42,7 +42,7 @@ fn process_instruction(
 
     msg!("Squaring value...");
 
-    let mut math_stuff = MathStuff::try_from_slice(&account.data.borrow())?;
+    let mut math_stuff = MathStuffSquare::try_from_slice(&account.data.borrow())?;
     math_stuff.square = math_stuff.square.pow(2);
     math_stuff.serialize(&mut &mut account.data.borrow_mut()[..])?;
 

@@ -4,6 +4,7 @@ SOLANA_PROGRAMS=("sum" "square")
 
 case $1 in
     "reset")
+        rm -rf ./node_modules
         for x in $(solana program show --programs | awk 'RP==0 {print $1}'); do 
             if [[ $x != "Program" ]]; 
             then 
@@ -13,6 +14,7 @@ case $1 in
         rm -rf dist/program
         ;;
     "clean")
+        rm -rf ./node_modules
         for program in "${SOLANA_PROGRAMS[@]}"; do
             cargo clean --manifest-path=./src/$program/Cargo.toml
         done;;
@@ -30,6 +32,7 @@ case $1 in
         ts-node ./src/example/hotel.ts
         ;;
     "reset-and-build")
+        rm -rf ./node_modules
         for x in $(solana program show --programs | awk 'RP==0 {print $1}'); do 
             if [[ $x != "Program" ]]; 
             then 
