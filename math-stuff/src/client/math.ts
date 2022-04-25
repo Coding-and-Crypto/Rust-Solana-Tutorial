@@ -45,6 +45,7 @@ Connect to dev net.
 */
 export async function connect() {
     connection = new Connection('https://api.devnet.solana.com', 'confirmed');
+
     console.log(`Successfully connected to Solana dev net.`);
 }
 
@@ -61,7 +62,10 @@ export async function getLocalAccount() {
         LAMPORTS_PER_SOL*2,
     );
     await connection.confirmTransaction(airdropRequest);
-    console.log(`Local account loaded successfully. Local account is ${localKeypair.publicKey}`);
+
+    console.log(`Local account loaded successfully.`);
+    console.log(`Local account's address is:`);
+    console.log(`   ${localKeypair.publicKey}`);
 }
 
 
@@ -73,7 +77,10 @@ export async function getProgram(programName: string) {
         path.join(PROGRAM_PATH, programName + '-keypair.json')
     );
     programId = programKeypair.publicKey;
-    console.log(`We're going to ping the ${programName} program. It's Program ID is ${programId.toBase58()}`);
+
+    console.log(`We're going to ping the ${programName} program.`);
+    console.log(`It's Program ID is:`);
+    console.log(`   ${programId.toBase58()}`)
 }
 
 
@@ -87,10 +94,18 @@ export async function configureClientAccount(accountSpaceSize: number) {
         SEED,
         programId,
     );
+
+    console.log(`For simplicity's sake, we've created an address using a seed.`);
+    console.log(`That seed is just the string "math".`);
+    console.log(`The generated address is:`);
+    console.log(`   ${clientPubKey.toBase58()}`);
+
     // Make sure it doesn't exist already.
     const greetedAccount = await connection.getAccountInfo(clientPubKey);
     if (greetedAccount === null) {
-        console.log(`Account ${clientPubKey.toBase58()} does not exist. Let's create it.`);
+
+        console.log(`Looks like that account does not exist. Let's create it.`);
+
         const transaction = new Transaction().add(
             SystemProgram.createAccountWithSeed({
                 fromPubkey: localKeypair.publicKey,
@@ -103,18 +118,21 @@ export async function configureClientAccount(accountSpaceSize: number) {
             }),
         );
         await sendAndConfirmTransaction(connection, transaction, [localKeypair]);
-        console.log(`Created client account ${clientPubKey.toBase58()}`);
+
+        console.log(`Client account created successfully.`);
     } else {
-        console.log(`Account ${clientPubKey.toBase58()} exists.`);
+        console.log(`Looks like that account exists already. We can just use it.`);
     }
-    console.log(`We will use the above account (client) to transact with the program.`);
 }
 
 
 /*
 Ping the program.
 */
-export async function pingProgram() {
+export async function pingProgram(programName: string) {
+    console.log(`All right, let's run it.`);
+    console.log(`Pinging ${programName} program...`);
+
     const instruction = new TransactionInstruction({
         keys: [{pubkey: clientPubKey, isSigner: false, isWritable: true}],
         programId,
@@ -125,6 +143,8 @@ export async function pingProgram() {
         new Transaction().add(instruction),
         [localKeypair],
     );
+
+    console.log(`Ping successful.`);
 }
 
 
@@ -136,5 +156,5 @@ export async function example(programName: string, accountSpaceSize: number) {
     await getLocalAccount();
     await getProgram(programName);
     await configureClientAccount(accountSpaceSize);
-    await pingProgram();
+    await pingProgram(programName);
 }
