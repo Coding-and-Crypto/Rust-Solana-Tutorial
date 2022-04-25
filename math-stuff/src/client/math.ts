@@ -61,7 +61,7 @@ export async function getLocalAccount() {
         LAMPORTS_PER_SOL*2,
     );
     await connection.confirmTransaction(airdropRequest);
-    console.log(`Local account configured successfully. Using account ${localKeypair.publicKey}`);
+    console.log(`Local account loaded successfully. Local account is ${localKeypair.publicKey}`);
 }
 
 
@@ -73,7 +73,7 @@ export async function getProgram(programName: string) {
         path.join(PROGRAM_PATH, programName + '-keypair.json')
     );
     programId = programKeypair.publicKey;
-    console.log(`Using program ${programId.toBase58()}`);
+    console.log(`We're going to ping the ${programName} program. It's Program ID is ${programId.toBase58()}`);
 }
 
 
@@ -90,6 +90,7 @@ export async function configureClientAccount(accountSpaceSize: number) {
     // Make sure it doesn't exist already.
     const greetedAccount = await connection.getAccountInfo(clientPubKey);
     if (greetedAccount === null) {
+        console.log(`Account ${clientPubKey.toBase58()} does not exist. Let's create it.`);
         const transaction = new Transaction().add(
             SystemProgram.createAccountWithSeed({
                 fromPubkey: localKeypair.publicKey,
@@ -102,10 +103,11 @@ export async function configureClientAccount(accountSpaceSize: number) {
             }),
         );
         await sendAndConfirmTransaction(connection, transaction, [localKeypair]);
-        console.log(`Created account ${clientPubKey.toBase58()} to transact with the program.`);
+        console.log(`Created client account ${clientPubKey.toBase58()}`);
     } else {
-        console.log(`Account ${clientPubKey.toBase58()} exists. Using it to transact with the program.`);
+        console.log(`Account ${clientPubKey.toBase58()} exists.`);
     }
+    console.log(`We will use the above account (client) to transact with the program.`);
 }
 
 
