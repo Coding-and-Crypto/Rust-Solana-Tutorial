@@ -48,6 +48,7 @@ export async function connect() {
     console.log(`Successfully connected to Solana dev net.`);
 }
 
+
 /*
 Use local keypair for client.
 */
@@ -63,6 +64,7 @@ export async function getLocalAccount() {
     console.log(`Local account configured successfully. Using account ${localKeypair.publicKey}`);
 }
 
+
 /*
 Get the targeted program.
 */
@@ -74,6 +76,7 @@ export async function getProgram(programName: string) {
     console.log(`Using program ${programId.toBase58()}`);
 }
 
+
 /*
 Configure client account.
 */
@@ -84,19 +87,25 @@ export async function configureClientAccount(accountSpaceSize: number) {
         SEED,
         programId,
     );
-    const transaction = new Transaction().add(
-        SystemProgram.createAccountWithSeed({
-            fromPubkey: localKeypair.publicKey,
-            basePubkey: localKeypair.publicKey,
-            seed: SEED,
-            newAccountPubkey: clientPubKey,
-            lamports: LAMPORTS_PER_SOL,
-            space: accountSpaceSize,
-            programId,
-        }),
-    );
-    await sendAndConfirmTransaction(connection, transaction, [localKeypair]);
-    console.log(`Created account ${clientPubKey.toBase58()} to transact with the program.`);
+    // Make sure it doesn't exist already.
+    const greetedAccount = await connection.getAccountInfo(clientPubKey);
+    if (greetedAccount === null) {
+        const transaction = new Transaction().add(
+            SystemProgram.createAccountWithSeed({
+                fromPubkey: localKeypair.publicKey,
+                basePubkey: localKeypair.publicKey,
+                seed: SEED,
+                newAccountPubkey: clientPubKey,
+                lamports: LAMPORTS_PER_SOL,
+                space: accountSpaceSize,
+                programId,
+            }),
+        );
+        await sendAndConfirmTransaction(connection, transaction, [localKeypair]);
+        console.log(`Created account ${clientPubKey.toBase58()} to transact with the program.`);
+    } else {
+        console.log(`Account ${clientPubKey.toBase58()} exists. Using it to transact with the program.`);
+    }
 }
 
 
