@@ -39,6 +39,11 @@ fn process_instruction(
         return Err(ProgramError::IncorrectProgramId);
     }
 
+    msg!("Debug output:");
+    msg!("Account ID: {}", account.key);
+    msg!("Executable?: {}", account.executable);
+    msg!("Lamports: {:#?}", account.lamports);
+    msg!("Debug output complete.");
     
     msg!("Adding 1 to sum...");
 
