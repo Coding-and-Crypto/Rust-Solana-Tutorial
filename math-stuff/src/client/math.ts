@@ -57,11 +57,11 @@ export async function getLocalAccount() {
     const configYml = await fs.readFile(CONFIG_FILE_PATH, {encoding: 'utf8'});
     const keypairPath = await yaml.parse(configYml).keypair_path;
     localKeypair = await createKeypairFromFile(keypairPath);
-    const airdropRequest = await connection.requestAirdrop(
-        localKeypair.publicKey,
-        LAMPORTS_PER_SOL*2,
-    );
-    await connection.confirmTransaction(airdropRequest);
+    // const airdropRequest = await connection.requestAirdrop(
+    //     localKeypair.publicKey,
+    //     LAMPORTS_PER_SOL*2,
+    // );
+    // await connection.confirmTransaction(airdropRequest);
 
     console.log(`Local account loaded successfully.`);
     console.log(`Local account's address is:`);
@@ -96,13 +96,13 @@ export async function configureClientAccount(accountSpaceSize: number) {
     );
 
     console.log(`For simplicity's sake, we've created an address using a seed.`);
-    console.log(`That seed is just the string "math".`);
+    console.log(`That seed is just the string "test(num)".`);
     console.log(`The generated address is:`);
     console.log(`   ${clientPubKey.toBase58()}`);
 
     // Make sure it doesn't exist already.
-    const greetedAccount = await connection.getAccountInfo(clientPubKey);
-    if (greetedAccount === null) {
+    const clientAccount = await connection.getAccountInfo(clientPubKey);
+    if (clientAccount === null) {
 
         console.log(`Looks like that account does not exist. Let's create it.`);
 
