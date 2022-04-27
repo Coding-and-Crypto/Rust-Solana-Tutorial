@@ -19,10 +19,5 @@ math-stuff
 
 ### Tutorial #4
 ```shell
-program-instructions
-```
-
-### Tutorials #5-8
-```shell
-math-stuff
+advanced-math
 ```
