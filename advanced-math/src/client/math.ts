@@ -11,6 +11,15 @@ import {
 import {
     createKeypairFromFile,
 } from './util';
+import {
+    SumInstruction,
+    SumInstructionSchema,
+} from './sum';
+import {
+    SquareInstruction,
+    SquareInstructionSchema,
+} from './square';
+import borsh from 'borsh';
 import fs from 'mz/fs';
 import os from 'os';
 import path from 'path';
@@ -126,17 +135,20 @@ export async function configureClientAccount(accountSpaceSize: number) {
 }
 
 
+// --------------------------------------------------------
+
+
 /*
-Ping the program.
+Execute the sum program.
 */
-export async function pingProgram(programName: string) {
+export async function executeSum(sumInstruction: SumInstruction) {
     console.log(`All right, let's run it.`);
-    console.log(`Pinging ${programName} program...`);
+    console.log(`Pinging sum program with instructions!! ...`);
 
     const instruction = new TransactionInstruction({
         keys: [{pubkey: clientPubKey, isSigner: false, isWritable: true}],
         programId,
-        data: Buffer.alloc(0), // Empty instruction data
+        data: Buffer.alloc(borsh.serialize(SumInstructionSchema, sumInstruction).length),
     });
     await sendAndConfirmTransaction(
         connection,
@@ -149,6 +161,31 @@ export async function pingProgram(programName: string) {
 
 
 /*
+Execute the square program.
+*/
+export async function executeSquare(squareInstruction: SquareInstruction) {
+    console.log(`All right, let's run it.`);
+    console.log(`Pinging square program with instructions!! ...`);
+
+    const instruction = new TransactionInstruction({
+        keys: [{pubkey: clientPubKey, isSigner: false, isWritable: true}],
+        programId,
+        data: Buffer.alloc(borsh.serialize(SquareInstructionSchema, squareInstruction).length),
+    });
+    await sendAndConfirmTransaction(
+        connection,
+        new Transaction().add(instruction),
+        [localKeypair],
+    );
+
+    console.log(`Ping successful.`);
+}
+
+
+// --------------------------------------------------------
+
+
+/*
 Run the example (main).
 */
 export async function example(programName: string, accountSpaceSize: number) {
@@ -156,5 +193,14 @@ export async function example(programName: string, accountSpaceSize: number) {
     await getLocalAccount();
     await getProgram(programName);
     await configureClientAccount(accountSpaceSize);
-    await pingProgram(programName);
+    if (programName == 'sum') {
+        await executeSum(new SumInstruction({adder: 1}));
+        await executeSum(new SumInstruction({adder: 5}));
+        await executeSum(new SumInstruction({adder: 3}));
+    } else if (programName == 'square') {
+        await executeSquare(new SquareInstruction({power: 2}));
+        await executeSquare(new SquareInstruction({power: 3}));
+    } else {
+        console.log(`Program: \"${programName}\" not found!`)
+    };
 }
