@@ -11,6 +11,9 @@ case $1 in
                 solana program close $x;
             fi
         done
+        for program in "${SOLANA_PROGRAMS[@]}"; do
+            cargo clean --manifest-path=./src/$program/Cargo.toml
+        done;;
         rm -rf dist/program
         ;;
     "clean")
