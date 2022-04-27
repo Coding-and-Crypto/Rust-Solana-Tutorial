@@ -8,6 +8,7 @@
     },
     "scripts": {
         "clean": "./scripts/cicd.sh clean",
+        "reset": "./scripts/cicd.sh reset",
         "build": "./scripts/cicd.sh build",
         "deploy": "./scripts/cicd.sh deploy",
         "example": "./scripts/cicd.sh example",
