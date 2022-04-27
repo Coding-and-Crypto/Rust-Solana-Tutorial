@@ -13,7 +13,7 @@ case $1 in
         done
         for program in "${SOLANA_PROGRAMS[@]}"; do
             cargo clean --manifest-path=./src/$program/Cargo.toml
-        done;;
+        done
         rm -rf dist/program
         ;;
     "clean")
