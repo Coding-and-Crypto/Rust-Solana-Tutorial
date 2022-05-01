@@ -1,22 +1,21 @@
 use borsh::{BorshDeserialize, BorshSerialize};
 use solana_program::{
-    account_info::{next_account_info, AccountInfo},
+    account_info::{next_account_info, AccountInfo}, 
     entrypoint, 
     entrypoint::ProgramResult, 
     msg, 
     program_error::ProgramError,
     pubkey::Pubkey,
 };
+use crate::calculator::CalculatorInstructions;
+
+mod calculator;
+
 
 
 #[derive(BorshSerialize, BorshDeserialize, Debug)]
-pub struct MathStuffSquare {
-    pub square: u32,
-}
-
-#[derive(BorshSerialize, BorshDeserialize, Debug)]
-pub struct SquareInstruction {
-    pub power: u32,
+pub struct Calculator {
+    pub value: u32,
 }
 
 
@@ -37,15 +36,12 @@ fn process_instruction(
         return Err(ProgramError::IncorrectProgramId);
     }
 
-    let mut math_stuff = MathStuffSquare::try_from_slice(&account.data.borrow())?;
-    let square_instruction = SquareInstruction::try_from_slice(&instruction_data)?;
+    let mut calc = Calculator::try_from_slice(&account.data.borrow())?;
+    let calculator_instructions = CalculatorInstructions::try_from_slice(&instruction_data)?;
 
-    msg!("Evaluating {} to the power of {}...",math_stuff.square, square_instruction.power);
+    calc.value = calculator_instructions.evaluate(calc.value);
 
-    math_stuff.square = math_stuff.square.pow(square_instruction.power);
-    math_stuff.serialize(&mut &mut account.data.borrow_mut()[..])?;
-
-    msg!("Current value is now: {}", math_stuff.square);
+    calc.serialize(&mut &mut account.data.borrow_mut()[..])?;
 
     Ok(())
 }
