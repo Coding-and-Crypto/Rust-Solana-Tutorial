@@ -90,7 +90,7 @@ export async function getProgram(programName: string) {
 Configure client account.
 */
 export async function configureClientAccount(accountSpaceSize: number) {
-    const SEED = 'test1';
+    const SEED = 'test7';
     clientPubKey = await PublicKey.createWithSeed(
         localKeypair.publicKey,
         SEED,
@@ -166,7 +166,7 @@ export async function example(programName: string, accountSpaceSize: number) {
     await getLocalAccount();
     await getProgram(programName);
     await configureClientAccount(accountSpaceSize);
-    await pingProgram(1, 4);
-    await pingProgram(2, 1);
-    await pingProgram(1, 2);
+    await pingProgram(1, 4); // Add 4
+    await pingProgram(2, 1); // Subtract 1
+    await pingProgram(3, 2); // Multiply by 2
 }

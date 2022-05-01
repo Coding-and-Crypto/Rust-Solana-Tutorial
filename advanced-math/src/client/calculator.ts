@@ -2,6 +2,7 @@ import * as borsh from 'borsh';
 import * as math from './math';
 
 
+
 // --------------------------------------------------------
 
 /*
@@ -30,6 +31,36 @@ const CALCULATOR_SIZE = borsh.serialize(
 // --------------------------------------------------------
 
 /*
+Instruction Data
+*/
+
+export class CalculatorInstructions {
+  operation = 0;
+  operating_value = 0;
+  constructor(fields: {operation: number, operating_value: number} | undefined = undefined) {
+    if (fields) {
+      this.operation = fields.operation;
+      this.operating_value = fields.operating_value;
+    }
+  }
+}
+
+export const CalculatorInstructionsSchema = new Map([
+  [CalculatorInstructions, {kind: 'struct', fields: [
+    ['operation', 'u32'], ['operating_value', 'u32']
+  ]}],
+]);
+
+export const CALCULATOR_INSTRUCTIONS_SIZE = borsh.serialize(
+  CalculatorInstructionsSchema,
+  new CalculatorInstructions(),
+).length;
+
+
+
+// --------------------------------------------------------
+
+/*
 Main
 */
 
@@ -39,9 +70,9 @@ async function main() {
 
 
 main().then(
-  () => process.exit(),
-  err => {
-    console.error(err);
-    process.exit(-1);
-  },
-);
+    () => process.exit(),
+    err => {
+      console.error(err);
+      process.exit(-1);
+    },
+  );
