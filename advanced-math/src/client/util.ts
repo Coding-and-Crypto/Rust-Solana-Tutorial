@@ -32,18 +32,18 @@ export async function getStringForInstruction(
 export async function createCalculatorInstructions(
     operation: number, operating_value: number): Promise<Buffer> {
 
-    const dataLayout: BufferLayout.Structure<any> = BufferLayout.struct(
+    const bufferLayout: BufferLayout.Structure<any> = BufferLayout.struct(
         [
             BufferLayout.u32('operation'),
             BufferLayout.u32('operating_value'),
         ]
     );
 
-    const data = Buffer.alloc(dataLayout.span);
-    dataLayout.encode({
+    const buffer = Buffer.alloc(bufferLayout.span);
+    bufferLayout.encode({
         operation: operation,
         operating_value: operating_value,
-    }, data);
+    }, buffer);
 
-    return data;
+    return buffer;
 }
