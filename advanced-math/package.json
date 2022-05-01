@@ -17,12 +17,14 @@
         "example:square": "ts-node ./src/client/square.ts"
     },
     "dependencies": {
+        "@solana/buffer-layout": "^4.0.0",
         "@solana/web3.js": "^1.33.0",
         "borsh": "^0.7.0",
+        "buffer": "^6.0.3",
         "mz": "^2.7.0",
         "yaml": "^1.10.2"
-      },
-      "devDependencies": {
+    },
+    "devDependencies": {
         "@tsconfig/recommended": "^1.0.1",
         "@types/eslint": "^8.2.2",
         "@types/eslint-plugin-prettier": "^3.1.0",
@@ -38,8 +40,8 @@
         "start-server-and-test": "^1.11.6",
         "ts-node": "^10.0.0",
         "typescript": "^4.0.5"
-      },
-      "engines": {
+    },
+    "engines": {
         "node": ">=14.0.0"
-      }
+    }
 }
