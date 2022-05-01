@@ -1,6 +1,6 @@
 #! /bin/bash
 
-SOLANA_PROGRAMS=("sum" "square")
+SOLANA_PROGRAMS=("calculator")
 
 case $1 in
     "reset")

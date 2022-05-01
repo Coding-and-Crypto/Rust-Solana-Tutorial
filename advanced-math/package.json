@@ -11,10 +11,8 @@
         "reset": "./scripts/cicd.sh reset",
         "build": "./scripts/cicd.sh build",
         "deploy": "./scripts/cicd.sh deploy",
-        "example": "./scripts/cicd.sh example",
         "reset-and-build": "./scripts/cicd.sh reset-and-build",
-        "example:sum": "ts-node ./src/client/sum.ts",
-        "example:square": "ts-node ./src/client/square.ts"
+        "example": "ts-node ./src/client/calculator.ts"
     },
     "dependencies": {
         "@solana/buffer-layout": "^4.0.0",
