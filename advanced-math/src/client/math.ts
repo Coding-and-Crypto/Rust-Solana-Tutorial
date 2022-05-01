@@ -10,16 +10,8 @@ import {
 } from '@solana/web3.js';
 import {
     createKeypairFromFile,
+    createCalculatorInstructions,
 } from './util';
-import {
-    SumInstruction,
-    SumInstructionSchema,
-} from './sum';
-import {
-    SquareInstruction,
-    SquareInstructionSchema,
-} from './square';
-import borsh from 'borsh';
 import fs from 'mz/fs';
 import os from 'os';
 import path from 'path';
@@ -135,20 +127,23 @@ export async function configureClientAccount(accountSpaceSize: number) {
 }
 
 
-// --------------------------------------------------------
-
-
 /*
-Execute the sum program.
+Ping the program.
 */
-export async function executeSum(sumInstruction: SumInstruction) {
+export async function pingProgram(
+    operation: number, operatingValue: number) {
+    
     console.log(`All right, let's run it.`);
-    console.log(`Pinging sum program with instructions!! ...`);
+    console.log(`Pinging our calculator program...`);
+
+    let calcInstructions = await createCalculatorInstructions(
+        operation, operatingValue
+    );
 
     const instruction = new TransactionInstruction({
         keys: [{pubkey: clientPubKey, isSigner: false, isWritable: true}],
         programId,
-        data: Buffer.alloc(borsh.serialize(SumInstructionSchema, sumInstruction).length),
+        data: calcInstructions,
     });
     await sendAndConfirmTransaction(
         connection,
@@ -158,31 +153,6 @@ export async function executeSum(sumInstruction: SumInstruction) {
 
     console.log(`Ping successful.`);
 }
-
-
-/*
-Execute the square program.
-*/
-export async function executeSquare(squareInstruction: SquareInstruction) {
-    console.log(`All right, let's run it.`);
-    console.log(`Pinging square program with instructions!! ...`);
-
-    const instruction = new TransactionInstruction({
-        keys: [{pubkey: clientPubKey, isSigner: false, isWritable: true}],
-        programId,
-        data: Buffer.alloc(borsh.serialize(SquareInstructionSchema, squareInstruction).length),
-    });
-    await sendAndConfirmTransaction(
-        connection,
-        new Transaction().add(instruction),
-        [localKeypair],
-    );
-
-    console.log(`Ping successful.`);
-}
-
-
-// --------------------------------------------------------
 
 
 /*
@@ -193,14 +163,5 @@ export async function example(programName: string, accountSpaceSize: number) {
     await getLocalAccount();
     await getProgram(programName);
     await configureClientAccount(accountSpaceSize);
-    if (programName == 'sum') {
-        await executeSum(new SumInstruction({adder: 1}));
-        await executeSum(new SumInstruction({adder: 5}));
-        await executeSum(new SumInstruction({adder: 3}));
-    } else if (programName == 'square') {
-        await executeSquare(new SquareInstruction({power: 2}));
-        await executeSquare(new SquareInstruction({power: 3}));
-    } else {
-        console.log(`Program: \"${programName}\" not found!`)
-    };
+    await pingProgram(1, 1);
 }
