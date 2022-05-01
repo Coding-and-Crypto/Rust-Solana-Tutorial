@@ -141,7 +141,7 @@ export async function pingProgram(
         operation, operatingValue
     );
 
-    console.log(`We're going to ${getStringForInstruction(operation, operatingValue)}`)
+    console.log(`We're going to ${await getStringForInstruction(operation, operatingValue)}`)
 
     const instruction = new TransactionInstruction({
         keys: [{pubkey: clientPubKey, isSigner: false, isWritable: true}],
