@@ -10,6 +10,7 @@ import {
 } from '@solana/web3.js';
 import {
     createKeypairFromFile,
+    getStringForInstruction,
     createCalculatorInstructions,
 } from './util';
 import fs from 'mz/fs';
@@ -140,6 +141,8 @@ export async function pingProgram(
         operation, operatingValue
     );
 
+    console.log(`We're going to ${getStringForInstruction(operation, operatingValue)}`)
+
     const instruction = new TransactionInstruction({
         keys: [{pubkey: clientPubKey, isSigner: false, isWritable: true}],
         programId,
@@ -163,5 +166,7 @@ export async function example(programName: string, accountSpaceSize: number) {
     await getLocalAccount();
     await getProgram(programName);
     await configureClientAccount(accountSpaceSize);
-    await pingProgram(1, 1);
+    await pingProgram(1, 4);
+    await pingProgram(2, 1);
+    await pingProgram(1, 2);
 }

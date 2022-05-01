@@ -30,37 +30,6 @@ const CALCULATOR_SIZE = borsh.serialize(
 // --------------------------------------------------------
 
 /*
-Instruction Data
-*/
-
-export class CalculatorInstructions {
-  operation =  Operation.ADD;
-  operating_value = 0;
-  constructor(fields: {operation: Operation, operating_value: number} | undefined = undefined) {
-    if (fields) {
-      this.operation = fields.operation;
-      this.operating_value = fields.operating_value;
-    }
-  }
-}
-
-export enum Operation {
-  ADD,
-  SUBTRACT,
-  MULTIPLY,
-  DIVIDE,
-}
-
-export const CalculatorInstructionsSchema = new Map([
-  [CalculatorInstructions, {kind: 'struct', fields: [
-    ['operation', 'Operation'], ['operating_value', 'u32']
-  ]}],
-]);
-
-
-// --------------------------------------------------------
-
-/*
 Main
 */
 

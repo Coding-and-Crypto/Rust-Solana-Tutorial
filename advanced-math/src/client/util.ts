@@ -1,16 +1,7 @@
-import {
-    Enum,
-    Keypair,
-} from '@solana/web3.js';
+import { Keypair } from '@solana/web3.js';
 import fs from 'mz/fs';
-import * as borsh from 'borsh';
 import * as BufferLayout from  '@solana/buffer-layout';
 import { Buffer } from 'buffer';
-import { 
-    CalculatorInstructions, 
-    CalculatorInstructionsSchema, 
-    Operation 
-} from './calculator';
   
   
   
@@ -23,17 +14,24 @@ export async function createKeypairFromFile(
 }
 
 
+export async function getStringForInstruction(
+    operation: number, operating_value: number) {
+
+    if (operation == 0) {
+        return "reset the example.";
+    } else if (operation == 1) {
+        return `add: ${operating_value}`;
+    } else if (operation == 2) {
+        return `subtract: ${operating_value}`;
+    } else if (operation == 3) {
+        return `multiply by: ${operating_value}`;
+    }
+}
+
+
 export async function createCalculatorInstructions(
     operation: number, operating_value: number): Promise<Buffer> {
-    // const dataLayout = BufferLayout.struct(
-    //     borsh.serialize(
-    //         CalculatorInstructionsSchema,
-    //         new CalculatorInstructions({
-    //             operation: Operation.ADD,
-    //             operating_value: operating_value,
-    //         }),
-    //       )
-    // );
+
     const dataLayout: BufferLayout.Structure<any> = BufferLayout.struct(
         [
             BufferLayout.u32('operation'),

@@ -13,7 +13,6 @@ use borsh::{BorshDeserialize, BorshSerialize};
 //             Operation::ADD => value + &self.operating_value,
 //             Operation::SUBTRACT => value - &self.operating_value,
 //             Operation::MULTIPLY => value * &self.operating_value,
-//             Operation::DIVIDE => value / &self.operating_value,
 //         }
 //     }
 // }
@@ -30,7 +29,6 @@ impl CalculatorInstructions {
             1 => value + &self.operating_value,
             2 => value - &self.operating_value,
             3 => value * &self.operating_value,
-            4 => value / &self.operating_value,
             _ => value * 0,
         }
     }
@@ -42,7 +40,6 @@ impl CalculatorInstructions {
 //     ADD,
 //     SUBTRACT,
 //     MULTIPLY,
-//     DIVIDE,
 // }
 
 // impl Operation {
@@ -51,7 +48,6 @@ impl CalculatorInstructions {
 //             "add" => Some(Operation::ADD),
 //             "subtract" => Some(Operation::SUBTRACT),
 //             "multiply" => Some(Operation::MULTIPLY),
-//             "divide" => Some(Operation::DIVIDE),
 //             _ => None
 //         }
 //     }
