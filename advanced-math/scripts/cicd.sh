@@ -30,10 +30,6 @@ case $1 in
             cargo build-bpf --manifest-path=./src/$program/Cargo.toml --bpf-out-dir=./dist/program
             solana program deploy dist/program/$program.so
         done;;
-    "example")
-        npm install
-        ts-node ./src/example/hotel.ts
-        ;;
     "reset-and-build")
         rm -rf ./node_modules
         for x in $(solana program show --programs | awk 'RP==0 {print $1}'); do 
