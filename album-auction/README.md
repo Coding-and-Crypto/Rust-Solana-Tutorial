@@ -2,4 +2,4 @@
 
 A simple example of a dApp!
 
-![](hotel-dapp.jpg)
+![](album-auction.jpg)
