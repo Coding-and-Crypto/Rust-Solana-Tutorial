@@ -16,7 +16,7 @@ export async function createKeypairFromFile(
 
     return Keypair.fromSecretKey(
         Uint8Array.from(JSON.parse(
-            fs.readFile(filePath, {encoding: 'utf8'})
+            await fs.readFile(filePath, {encoding: 'utf8'})
         ))
     );
 }

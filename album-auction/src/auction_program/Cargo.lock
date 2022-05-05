@@ -154,8 +154,12 @@ dependencies = [
 name = "auction_program"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "borsh",
  "borsh-derive",
+ "home",
+ "serde_yaml",
+ "solana-cli-config",
  "solana-program",
  "solana-program-test",
  "solana-sdk",
@@ -1180,6 +1184,15 @@ dependencies = [
  "digest 0.9.0",
  "generic-array",
  "hmac 0.8.1",
+]
+
+[[package]]
+name = "home"
+version = "0.5.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2456aef2e6b6a9784192ae780c0f15bc57df0e918585282325e8c8ac27737654"
+dependencies = [
+ "winapi",
 ]
 
 [[package]]

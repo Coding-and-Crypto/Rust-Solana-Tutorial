@@ -1,16 +1,18 @@
 use {
     solana_program::{
-        pubkey::Pubkey,
+        account_info::AccountInfo,
         entrypoint::ProgramResult,
+        pubkey::Pubkey,
     },
     crate::album::{
         Album,
-        ALBUM_CATALOG,
     },
 };
 
 
-pub fn submit_bid(address: &Pubkey) -> ProgramResult {
+pub fn submit_bid(account: &AccountInfo) -> ProgramResult {
+    
     // Submit a bid for an album!
+    
     Ok(())
 }

@@ -58,7 +58,7 @@ export class Auction {
         
         this.localKeypair = await createKeypairFromFile(
             yaml.parse(
-                fs.readFile(this.CONFIG_FILE_PATH, {encoding: 'utf8'})
+                await fs.readFile(this.CONFIG_FILE_PATH, {encoding: 'utf8'})
             ).keypair_path
         );
         console.log(`Successfully loaded local account:`);

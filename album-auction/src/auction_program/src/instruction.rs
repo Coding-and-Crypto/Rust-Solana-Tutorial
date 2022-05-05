@@ -4,11 +4,11 @@ use {
         BorshSerialize
     },
     solana_program::{
-        pubkey::Pubkey,
+        account_info::AccountInfo,
         entrypoint::ProgramResult,
     },
     crate::auction::submit_bid,
-    crate::init::initialize_data,
+    crate::reset::reset_data,
 };
 
 
@@ -25,14 +25,18 @@ pub struct AuctionInstruction {
 
 
 pub fn evaluate_instructions( 
-    address: &Pubkey, 
+    account: &AccountInfo, 
     instruction_data: &[u8]
 ) -> ProgramResult {
 
     let auction_instruction = AuctionInstruction::try_from_slice(&instruction_data)?;
 
     match auction_instruction.command {
-        AuctionInstructionCommand::BID => submit_bid(address),
-        AuctionInstructionCommand::INIT => initialize_data(address),
+        AuctionInstructionCommand::BID => {
+            submit_bid(account)
+        },
+        AuctionInstructionCommand::INIT => {
+            reset_data(account)
+        },
     }
 }

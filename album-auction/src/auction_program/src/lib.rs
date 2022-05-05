@@ -12,8 +12,9 @@ use {
 
 mod album;
 mod auction;
-mod init;
 mod instruction;
+mod reset;
+mod util;
 
 
 entrypoint!(process_instruction);
@@ -32,5 +33,5 @@ fn process_instruction(
         return Err(ProgramError::IncorrectProgramId);
     };
 
-    evaluate_instructions(account.key, instruction_data)
+    evaluate_instructions(account, instruction_data)
 }
