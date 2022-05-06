@@ -1,3 +1,5 @@
+extern crate solana_sdk;
+
 use {
     solana_program::{
         account_info::{next_account_info, AccountInfo}, 
@@ -10,11 +12,11 @@ use {
     crate::instruction::evaluate_instructions,
 };
 
-mod album;
 mod auction;
+mod catalog;
 mod instruction;
 mod reset;
-mod util;
+// mod util;
 
 
 entrypoint!(process_instruction);
