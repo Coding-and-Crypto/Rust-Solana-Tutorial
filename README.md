@@ -1,6 +1,6 @@
 # Rust Solana Tutorial
 
-:movie_camera: [Check it out on YouTube!](https://www.youtube.com/playlist?list=PLUBKxx7QjtVk9cVT9VaTtoDKivyWuLZZf)
+:movie_camera: [Check it out on YouTube!](https://www.youtube.com/playlist?list=PLUBKxx7QjtVnU3hkPc8GF1Jh4DE7cf4n1)
 
 ### Tutorial #1
 ```shell
