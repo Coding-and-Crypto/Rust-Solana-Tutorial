@@ -76,12 +76,12 @@ export const AUCTION_SIZE = borsh.serialize(
 /**
  * Auction Instruction
  */
-enum AuctionInstructionCommand {
+export enum AuctionInstructionCommand {
     BID,
     INIT,
 }
 
-class AuctionInstruction {
+export class AuctionInstruction {
     command: AuctionInstructionCommand;
     constructor(
         fields: {
@@ -93,13 +93,13 @@ class AuctionInstruction {
     }
 }
 
-const AuctionInstructionSchema = new Map([
+export const AuctionInstructionSchema = new Map([
     [AuctionInstruction, {
         kind: 'struct', fields: [['command', 'enum']]
     }],
 ]);
   
-const AUCTION_INSTRUCTION_SIZE = borsh.serialize(
+export const AUCTION_INSTRUCTION_SIZE = borsh.serialize(
     AuctionInstructionSchema,
     new AuctionInstruction(),
 ).length;

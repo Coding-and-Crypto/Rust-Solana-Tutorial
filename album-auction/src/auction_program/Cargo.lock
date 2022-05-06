@@ -156,8 +156,6 @@ version = "0.1.0"
 dependencies = [
  "borsh",
  "borsh-derive",
- "serde",
- "serde_yaml",
  "solana-program",
  "solana-program-test",
  "solana-sdk",

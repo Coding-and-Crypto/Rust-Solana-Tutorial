@@ -14,10 +14,6 @@ import {
 import {
     AUCTION_SIZE,
 } from './schema';
-import {
-    reset_simulation,
-    auction_simulation,
-} from './simulation';
 import fs from 'mz/fs';
 import os from 'os';
 import path from 'path';
@@ -119,6 +115,8 @@ export class Auction {
             await sendAndConfirmTransaction(this.connection, transaction, [this.localKeypair]);
             fs.writeFile(this.AUCTION_DATA_ACCOUNT_KEYPAIR_FILE, dataAccountKey)
         }
+
+        
     }
 
 
@@ -126,6 +124,6 @@ export class Auction {
      * Simulated bidding.
      */
     async simulateBidding() {
-        auction_simulation();
+        
     }    
 }
