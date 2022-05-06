@@ -11,6 +11,13 @@ import {
 import {
     createKeypairFromFile,
 } from './util';
+import {
+    AUCTION_SIZE,
+} from './schema';
+import {
+    reset_simulation,
+    auction_simulation,
+} from './simulation';
 import fs from 'mz/fs';
 import os from 'os';
 import path from 'path';
@@ -26,6 +33,7 @@ export class Auction {
     SOLANA_NETWORK = "devnet";
     AUCTION_PROGRAM_NAME = "auction_program";
     AUCTION_DATA_ACCOUNT_SEED = "auction";
+    AUCTION_DATA_ACCOUNT_KEYPAIR_FILE = "../../data/data-account-keypair.json";
     CONFIG_FILE_PATH = path.resolve(
         os.homedir(),
         '.config',
@@ -86,14 +94,38 @@ export class Auction {
      * Resets the auction by removing any winners.
      */
     async resetSimulation() {
+        console.log("Resetting auction simulation...");
+        
+        let dataAccountKey = await PublicKey.createWithSeed(
+            this.localKeypair.publicKey,
+            this.AUCTION_DATA_ACCOUNT_SEED,
+            this.auctionProgramId,
+        );
 
+        // Make sure it doesn't exist already.
+        const clientAccount = await this.connection.getAccountInfo(dataAccountKey);
+        if (clientAccount === null) {
+            const transaction = new Transaction().add(
+                SystemProgram.createAccountWithSeed({
+                    fromPubkey: this.localKeypair.publicKey,
+                    basePubkey: this.localKeypair.publicKey,
+                    seed: this.AUCTION_DATA_ACCOUNT_SEED,
+                    newAccountPubkey: dataAccountKey,
+                    lamports: LAMPORTS_PER_SOL,
+                    space: AUCTION_SIZE,
+                    programId: this.auctionProgramId,
+                }),
+            );
+            await sendAndConfirmTransaction(this.connection, transaction, [this.localKeypair]);
+            fs.writeFile(this.AUCTION_DATA_ACCOUNT_KEYPAIR_FILE, dataAccountKey)
+        }
     }
 
 
     /**
-     * Simulated bidding - conducted in `simulation.ts`.
+     * Simulated bidding.
      */
     async simulateBidding() {
-
+        auction_simulation();
     }    
 }

@@ -4,7 +4,6 @@ import * as borsh from 'borsh';
 /**
  * Album
  */
-
 class Album {
     id: number;
     title: string;
@@ -45,9 +44,38 @@ const ALBUM_SIZE = borsh.serialize(
 
 
 /**
+ * Album
+ */
+ class Auction {
+    catalog: Album[];
+    constructor(
+        fields: {
+            catalog: Album[],
+        } | undefined = undefined
+    )
+    {
+        this.catalog = fields.catalog;
+    }
+}
+
+const AuctionSchema = new Map([
+    [Auction, {
+        kind: 'struct', fields: [
+            ['catalog', 'Vec<Album>'],
+        ]
+    }],
+]);
+  
+export const AUCTION_SIZE = borsh.serialize(
+    AuctionSchema,
+    new Auction(),
+).length;
+
+
+
+/**
  * Auction Instruction
  */
-
 enum AuctionInstructionCommand {
     BID,
     INIT,
