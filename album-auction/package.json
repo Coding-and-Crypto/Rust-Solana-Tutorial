@@ -12,7 +12,7 @@
         "build": "./scripts/cicd.sh build",
         "deploy": "./scripts/cicd.sh deploy",
         "reset-and-build": "./scripts/cicd.sh reset-and-build",
-        "example": "ts-node ./src/client/calculator.ts"
+        "simulation": "ts-node ./src/app/main.ts"
     },
     "dependencies": {
         "@solana/buffer-layout": "^4.0.0",

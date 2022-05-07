@@ -7,6 +7,9 @@ use {
 };
 
 
+/*
+ * Album
+ */
 #[derive(BorshSerialize, BorshDeserialize, Debug)]
 pub struct Album {
     pub id: u8,
@@ -16,6 +19,9 @@ pub struct Album {
 }
 
 
+/*
+ * Auction
+ */
 #[derive(BorshSerialize, BorshDeserialize, Debug)]
 pub struct Auction {
     pub catalog: Vec<Album>,
@@ -58,4 +64,19 @@ impl Auction {
             ]
         )
     }
+}
+
+
+/**
+ * Auction Instruction
+ */
+ #[derive(BorshSerialize, BorshDeserialize, Debug)]
+pub enum AuctionInstructionCommand {
+    BID,
+    RESET,
+}
+
+#[derive(BorshSerialize, BorshDeserialize, Debug)]
+pub struct AuctionInstruction {
+    pub command: AuctionInstructionCommand,
 }

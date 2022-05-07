@@ -8,20 +8,12 @@ use {
         entrypoint::ProgramResult,
     },
     crate::auction::submit_bid,
+    crate::catalog{
+        AuctionInstruction,
+        AuctionInstructionCommand
+    },
     crate::reset::reset_data,
 };
-
-
-#[derive(BorshSerialize, BorshDeserialize, Debug)]
-pub enum AuctionInstructionCommand {
-    BID,
-    INIT,
-}
-
-#[derive(BorshSerialize, BorshDeserialize, Debug)]
-pub struct AuctionInstruction {
-    pub command: AuctionInstructionCommand,
-}
 
 
 pub fn evaluate_instructions( 
@@ -35,7 +27,7 @@ pub fn evaluate_instructions(
         AuctionInstructionCommand::BID => {
             submit_bid(account)
         },
-        AuctionInstructionCommand::INIT => {
+        AuctionInstructionCommand::RESET => {
             reset_data(account)
         },
     }

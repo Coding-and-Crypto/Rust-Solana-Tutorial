@@ -5,10 +5,10 @@ import * as borsh from 'borsh';
  * Album
  */
 class Album {
-    id: number;
-    title: string;
-    artist: string;
-    winner: string;
+    id = 0;
+    title = "";
+    artist = "";
+    winner = "";
     constructor(
         fields: {
             id: number,
@@ -18,10 +18,12 @@ class Album {
         } | undefined = undefined
     )
     {
-        this.id = fields.id;
-        this.title = fields.title;
-        this.artist = fields.artist;
-        this.winner = fields.winner;
+        if (fields) {
+            this.id = fields.id;
+            this.title = fields.title;
+            this.artist = fields.artist;
+            this.winner = fields.winner;
+        }
     }
 }
 
@@ -29,9 +31,9 @@ const AlbumSchema = new Map([
     [Album, {
         kind: 'struct', fields: [
             ['id', 'u8'],
-            ['title', 'string'],
-            ['artist', 'string'],
-            ['winner', 'string'],
+            ['title', 'u8'],
+            ['artist', 'u8'],
+            ['winner', 'u8'],
         ]
     }],
 ]);
@@ -44,24 +46,26 @@ const ALBUM_SIZE = borsh.serialize(
 
 
 /**
- * Album
+ * Auction
  */
  class Auction {
-    catalog: Album[];
+    catalog = [new Album()];
     constructor(
         fields: {
             catalog: Album[],
         } | undefined = undefined
     )
     {
-        this.catalog = fields.catalog;
+        if (fields) {
+            this.catalog = fields.catalog;
+        }
     }
 }
 
 const AuctionSchema = new Map([
     [Auction, {
         kind: 'struct', fields: [
-            ['catalog', 'Vec<Album>'],
+            ['catalog', 'u8'],
         ]
     }],
 ]);
@@ -78,24 +82,26 @@ export const AUCTION_SIZE = borsh.serialize(
  */
 export enum AuctionInstructionCommand {
     BID,
-    INIT,
+    RESET,
 }
 
 export class AuctionInstruction {
-    command: AuctionInstructionCommand;
+    command = AuctionInstructionCommand.BID;
     constructor(
         fields: {
             command: AuctionInstructionCommand,
         } | undefined = undefined
     )
     {
-        this.command = fields.command;
+        if (fields) {
+            this.command = fields.command;
+        }
     }
 }
 
 export const AuctionInstructionSchema = new Map([
     [AuctionInstruction, {
-        kind: 'struct', fields: [['command', 'enum']]
+        kind: 'struct', fields: [['command', 'u8']]
     }],
 ]);
   

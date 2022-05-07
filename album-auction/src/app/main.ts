@@ -1,11 +1,14 @@
-import { Auction } from "./auction";
+import {
+    auctionSetup,
+    resetSimulation,
+    simulateBidding,
+} from "./auction";
 
 
 async function main() {
-    let auction = new Auction();
-    auction.setup();
-    auction.resetSimulation();
-    auction.simulateBidding();
+    await auctionSetup();
+    await resetSimulation();
+    // await simulateBidding();
 }
 
 

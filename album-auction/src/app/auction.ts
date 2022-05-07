@@ -9,11 +9,13 @@ import {
     sendAndConfirmTransaction,
 } from '@solana/web3.js';
 import {
-    createKeypairFromFile,
-} from './util';
-import {
+    AuctionInstructionCommand,
     AUCTION_SIZE,
 } from './schema';
+import {
+    createKeypairFromFile,
+    createAuctionInstructions,
+} from './util';
 import fs from 'mz/fs';
 import os from 'os';
 import path from 'path';
@@ -21,109 +23,122 @@ import yaml from 'yaml';
 
 
 
-export class Auction {
+/**
+ * Configs
+ */
+const SOLANA_NETWORK = "devnet";
+const AUCTION_PROGRAM_NAME = "auction_program";
+const AUCTION_DATA_ACCOUNT_SEED = "auction";
+const AUCTION_DATA_ACCOUNT_KEYPAIR_FILE = "../../data/data-account-keypair.json";
+const CONFIG_FILE_PATH = path.resolve(
+    os.homedir(),
+    '.config',
+    'solana',
+    'cli',
+    'config.yml',
+);
+const PROGRAM_PATH = path.resolve(__dirname, '../../dist/program');
 
-    /**
-     * Configs
-     */
-    SOLANA_NETWORK = "devnet";
-    AUCTION_PROGRAM_NAME = "auction_program";
-    AUCTION_DATA_ACCOUNT_SEED = "auction";
-    AUCTION_DATA_ACCOUNT_KEYPAIR_FILE = "../../data/data-account-keypair.json";
-    CONFIG_FILE_PATH = path.resolve(
-        os.homedir(),
-        '.config',
-        'solana',
-        'cli',
-        'config.yml',
+/**
+ * Attributes
+ */
+let connection: Connection;
+let localKeypair: Keypair;
+let auctionProgramKeypair: Keypair;
+let auctionProgramId: PublicKey;
+let dataAccountKey: PublicKey;
+
+
+/**
+ * Setup: Connects to Solana network & loads local keypair.
+ */
+export async function auctionSetup() {
+
+    console.log(`Initializing...`);
+    
+    connection = new Connection(
+        `https://api.${SOLANA_NETWORK}.solana.com`, 'confirmed'
     );
-    PROGRAM_PATH = path.resolve(__dirname, '../../dist/program');
+    console.log(`Successfully connected to Solana ${SOLANA_NETWORK}.`);
+    
+    localKeypair = await createKeypairFromFile(
+        await yaml.parse(
+            await fs.readFile(CONFIG_FILE_PATH, {encoding: 'utf8'})
+        ).keypair_path
+    );
+    console.log(`Successfully loaded local account:`);
+    console.log(`   ${localKeypair.publicKey}`);
 
-    /**
-     * Attributes
-     */
-    connection: Connection;
-    localKeypair: Keypair;
-    auctionProgramKeypair: Keypair;
-    auctionProgramId: PublicKey;
+    // console.log(`Balance is too low in local account.`);
+    // console.log(`Requesting airdrop...`);
+    // connection.confirmTransaction(
+    //     connection.requestAirdrop(
+    //         localKeypair.publicKey,
+    //         LAMPORTS_PER_SOL,
+    //     )
+    // )
+
+    auctionProgramKeypair = await createKeypairFromFile(
+        path.join(
+            PROGRAM_PATH, 
+            AUCTION_PROGRAM_NAME + '-keypair.json')
+    );
+    auctionProgramId = auctionProgramKeypair.publicKey;
+}
 
 
-    /**
-     * Setup: Connects to Solana network & loads local keypair.
-     */
-    async setup() {
+/**
+ * Resets the auction by removing any winners.
+ */
+export async function resetSimulation() {
+    console.log("Resetting auction simulation...");
+    
+    dataAccountKey = await PublicKey.createWithSeed(
+        localKeypair.publicKey,
+        AUCTION_DATA_ACCOUNT_SEED,
+        auctionProgramId,
+    );
 
-        console.log(`Initializing...`);
-        
-        this.connection = new Connection(
-            `https://api.${this.SOLANA_NETWORK}.solana.com`, 'confirmed'
+    // Make sure it doesn't exist already.
+    const clientAccount = await connection.getAccountInfo(dataAccountKey);
+    if (clientAccount === null) {
+        const transaction = new Transaction().add(
+            SystemProgram.createAccountWithSeed({
+                fromPubkey: localKeypair.publicKey,
+                basePubkey: localKeypair.publicKey,
+                seed: AUCTION_DATA_ACCOUNT_SEED,
+                newAccountPubkey: dataAccountKey,
+                lamports: LAMPORTS_PER_SOL,
+                space: AUCTION_SIZE,
+                programId: auctionProgramId,
+            }),
         );
-        console.log(`Successfully connected to Solana ${this.SOLANA_NETWORK}.`);
-        
-        this.localKeypair = await createKeypairFromFile(
-            yaml.parse(
-                await fs.readFile(this.CONFIG_FILE_PATH, {encoding: 'utf8'})
-            ).keypair_path
-        );
-        console.log(`Successfully loaded local account:`);
-        console.log(`   ${this.localKeypair.publicKey}`);
-
-        // console.log(`Balance is too low in local account.`);
-        // console.log(`Requesting airdrop...`);
-        // this.connection.confirmTransaction(
-        //     this.connection.requestAirdrop(
-        //         this.localKeypair.publicKey,
-        //         LAMPORTS_PER_SOL,
-        //     )
-        // )
-
-        this.auctionProgramKeypair = await createKeypairFromFile(
-            path.join(
-                this.PROGRAM_PATH, 
-                this.AUCTION_PROGRAM_NAME + '-keypair.json')
-        );
-        this.auctionProgramId = this.auctionProgramKeypair.publicKey;
+        await sendAndConfirmTransaction(connection, transaction, [localKeypair]);
+        await fs.writeFile(AUCTION_DATA_ACCOUNT_KEYPAIR_FILE, dataAccountKey.toString())
     }
 
+    let resetInstructions = await createAuctionInstructions(
+        AuctionInstructionCommand.RESET
+    )
 
-    /**
-     * Resets the auction by removing any winners.
-     */
-    async resetSimulation() {
-        console.log("Resetting auction simulation...");
-        
-        let dataAccountKey = await PublicKey.createWithSeed(
-            this.localKeypair.publicKey,
-            this.AUCTION_DATA_ACCOUNT_SEED,
-            this.auctionProgramId,
-        );
+    const instruction = new TransactionInstruction({
+        keys: [{pubkey: dataAccountKey, isSigner: false, isWritable: true}],
+        programId: auctionProgramId,
+        data: resetInstructions,
+    });
 
-        // Make sure it doesn't exist already.
-        const clientAccount = await this.connection.getAccountInfo(dataAccountKey);
-        if (clientAccount === null) {
-            const transaction = new Transaction().add(
-                SystemProgram.createAccountWithSeed({
-                    fromPubkey: this.localKeypair.publicKey,
-                    basePubkey: this.localKeypair.publicKey,
-                    seed: this.AUCTION_DATA_ACCOUNT_SEED,
-                    newAccountPubkey: dataAccountKey,
-                    lamports: LAMPORTS_PER_SOL,
-                    space: AUCTION_SIZE,
-                    programId: this.auctionProgramId,
-                }),
-            );
-            await sendAndConfirmTransaction(this.connection, transaction, [this.localKeypair]);
-            fs.writeFile(this.AUCTION_DATA_ACCOUNT_KEYPAIR_FILE, dataAccountKey)
-        }
-
-        
-    }
+    await sendAndConfirmTransaction(
+        connection,
+        new Transaction().add(instruction),
+        [localKeypair],
+    );
+    console.log("Simulation reset.");
+}
 
 
-    /**
-     * Simulated bidding.
-     */
-    async simulateBidding() {
-        
-    }    
+/**
+ * Simulated bidding.
+ */
+export async function simulateBidding() {
+    
 }

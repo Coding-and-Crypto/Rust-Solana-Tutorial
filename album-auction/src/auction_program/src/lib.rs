@@ -25,6 +25,8 @@ fn process_instruction(
     instruction_data: &[u8],
 ) -> ProgramResult {
 
+    msg!("Ping successful.");
+
     let accounts_iter = &mut accounts.iter();
     let account = next_account_info(accounts_iter)?;
     if account.owner != program_id {

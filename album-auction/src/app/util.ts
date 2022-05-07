@@ -1,3 +1,4 @@
+import * as BufferLayout from  '@solana/buffer-layout';
 import { Keypair } from '@solana/web3.js';
 import {
     AUCTION_INSTRUCTION_SIZE,
@@ -36,15 +37,13 @@ export async function createAuctionInstructions(
 
     const bufferLayout: BufferLayout.Structure<any> = BufferLayout.struct(
         [
-            BufferLayout.u32('operation'),
-            BufferLayout.u32('operating_value'),
+            BufferLayout.u8('command'),
         ]
     );
 
     const buffer = Buffer.alloc(bufferLayout.span);
     bufferLayout.encode({
-        operation: operation,
-        operating_value: operating_value,
+        command: command,
     }, buffer);
 
     return buffer;
