@@ -4,7 +4,7 @@ use {
         entrypoint::ProgramResult,
         pubkey::Pubkey,
     },
-    crate::catalog::{
+    crate::schema::{
         Album,
     },
 };

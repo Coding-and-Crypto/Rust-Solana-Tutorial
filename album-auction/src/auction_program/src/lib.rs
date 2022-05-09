@@ -11,9 +11,9 @@ use {
 };
 
 mod auction;
-mod catalog;
 mod instruction;
 mod reset;
+mod schema;
 
 
 entrypoint!(process_instruction);
@@ -25,13 +25,11 @@ fn process_instruction(
     instruction_data: &[u8],
 ) -> ProgramResult {
 
-    msg!("Ping successful.");
-
     let accounts_iter = &mut accounts.iter();
     let account = next_account_info(accounts_iter)?;
     if account.owner != program_id {
         msg!("Account does not have the correct program id!");
-        return Err(ProgramError::IncorrectProgramId);
+        return Err(ProgramError::IncorrectProgramId)
     };
 
     evaluate_instructions(account, instruction_data)
