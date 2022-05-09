@@ -1,10 +1,11 @@
+import { PublicKey } from '@solana/web3.js';
 import * as borsh from 'borsh';
 
 
 /**
  * Album
  */
-class Album {
+export class Album {
     id = 0;
     title = "";
     artist = "";
@@ -27,54 +28,21 @@ class Album {
     }
 }
 
-const AlbumSchema = new Map([
+export const AlbumSchema = new Map([
     [Album, {
         kind: 'struct', fields: [
-            ['id', 'u8'],
-            ['title', 'u8'],
-            ['artist', 'u8'],
-            ['winner', 'u8'],
+            ['id', 'u32'],
+            ['title', 'u32'],
+            ['artist', 'u32'],
+            ['winner', 'u32'],
         ]
     }],
 ]);
   
-const ALBUM_SIZE = borsh.serialize(
+export const ALBUM_SIZE = borsh.serialize(
     AlbumSchema,
     new Album(),
 ).length;
-
-
-
-/**
- * Auction
- */
- class Auction {
-    catalog = [new Album()];
-    constructor(
-        fields: {
-            catalog: Album[],
-        } | undefined = undefined
-    )
-    {
-        if (fields) {
-            this.catalog = fields.catalog;
-        }
-    }
-}
-
-const AuctionSchema = new Map([
-    [Auction, {
-        kind: 'struct', fields: [
-            ['catalog', 'u8'],
-        ]
-    }],
-]);
-  
-export const AUCTION_SIZE = borsh.serialize(
-    AuctionSchema,
-    new Auction(),
-).length;
-
 
 
 /**
@@ -87,21 +55,24 @@ export enum AuctionInstructionCommand {
 
 export class AuctionInstruction {
     command = AuctionInstructionCommand.BID;
+    localPubkey = PublicKey.default;
     constructor(
         fields: {
             command: AuctionInstructionCommand,
+            localPubkey: PublicKey,
         } | undefined = undefined
     )
     {
         if (fields) {
             this.command = fields.command;
+            this.localPubkey = this.localPubkey;
         }
     }
 }
 
 export const AuctionInstructionSchema = new Map([
     [AuctionInstruction, {
-        kind: 'struct', fields: [['command', 'u8']]
+        kind: 'struct', fields: [['command', 'u32']]
     }],
 ]);
   

@@ -1,19 +1,11 @@
 import * as BufferLayout from  '@solana/buffer-layout';
-import { Keypair } from '@solana/web3.js';
-import {
-    AUCTION_INSTRUCTION_SIZE,
-    AuctionInstruction,
-    AuctionInstructionCommand,
-    AuctionInstructionSchema,
-} from './schema';
+import { Keypair, PublicKey } from '@solana/web3.js';
+import { AuctionInstructionCommand } from './schema';
 import fs from 'mz/fs';
 
 
-export const DATA_ACCOUNT_SEED: string = "data";
-export const DATA_ACCOUNT_KEYPAIR_FILE: string = "data/data-account-keypair.json";
 
-
-function sleep(seconds: number) {
+export function sleep(seconds: number) {
     return new Promise(
         resolve => setTimeout(resolve, seconds * 1000)
     );
@@ -33,17 +25,20 @@ export async function createKeypairFromFile(
 
 
 export async function createAuctionInstructions(
-    command: AuctionInstructionCommand): Promise<Buffer> {
+    command: AuctionInstructionCommand,
+    localPubkey: PublicKey): Promise<Buffer> {
 
     const bufferLayout: BufferLayout.Structure<any> = BufferLayout.struct(
         [
             BufferLayout.u8('command'),
+            BufferLayout.u8('localPubkey'),
         ]
     );
 
     const buffer = Buffer.alloc(bufferLayout.span);
     bufferLayout.encode({
         command: command,
+        localPubkey: localPubkey,
     }, buffer);
 
     return buffer;

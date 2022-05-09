@@ -27,7 +27,6 @@ case $1 in
         done;;
     "deploy")
         for program in "${SOLANA_PROGRAMS[@]}"; do
-            cargo build-bpf --manifest-path=./src/$program/Cargo.toml --bpf-out-dir=./dist/program
             solana program deploy dist/program/$program.so
         done;;
     "reset-and-build")

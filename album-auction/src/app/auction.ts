@@ -10,7 +10,7 @@ import {
 } from '@solana/web3.js';
 import {
     AuctionInstructionCommand,
-    AUCTION_SIZE,
+    ALBUM_SIZE,
 } from './schema';
 import {
     createKeypairFromFile,
@@ -28,8 +28,9 @@ import yaml from 'yaml';
  */
 const SOLANA_NETWORK = "devnet";
 const AUCTION_PROGRAM_NAME = "auction_program";
-const AUCTION_DATA_ACCOUNT_SEED = "auction";
-const AUCTION_DATA_ACCOUNT_KEYPAIR_FILE = "../../data/data-account-keypair.json";
+
+const ALBUM_ACCOUNT_SEEDS = ["beatles", "queen", "halen", "acdc"];
+
 const CONFIG_FILE_PATH = path.resolve(
     os.homedir(),
     '.config',
@@ -69,14 +70,14 @@ export async function auctionSetup() {
     console.log(`Successfully loaded local account:`);
     console.log(`   ${localKeypair.publicKey}`);
 
-    // console.log(`Balance is too low in local account.`);
-    // console.log(`Requesting airdrop...`);
-    // connection.confirmTransaction(
-    //     connection.requestAirdrop(
-    //         localKeypair.publicKey,
-    //         LAMPORTS_PER_SOL,
-    //     )
-    // )
+    console.log(`Balance is too low in local account.`);
+    console.log(`Requesting airdrop...`);
+    await connection.confirmTransaction(
+        await connection.requestAirdrop(
+            localKeypair.publicKey,
+            LAMPORTS_PER_SOL,
+        )
+    )
 
     auctionProgramKeypair = await createKeypairFromFile(
         path.join(
@@ -90,12 +91,13 @@ export async function auctionSetup() {
 /**
  * Resets the auction by removing any winners.
  */
-export async function resetSimulation() {
-    console.log("Resetting auction simulation...");
-    
+async function resetAlbum(seed: string) {
+
+    console.log(`   Resetting album with seed [\"${seed}\"] ...`);
+
     dataAccountKey = await PublicKey.createWithSeed(
         localKeypair.publicKey,
-        AUCTION_DATA_ACCOUNT_SEED,
+        seed,
         auctionProgramId,
     );
 
@@ -106,19 +108,19 @@ export async function resetSimulation() {
             SystemProgram.createAccountWithSeed({
                 fromPubkey: localKeypair.publicKey,
                 basePubkey: localKeypair.publicKey,
-                seed: AUCTION_DATA_ACCOUNT_SEED,
+                seed: seed,
                 newAccountPubkey: dataAccountKey,
                 lamports: LAMPORTS_PER_SOL,
-                space: AUCTION_SIZE,
+                space: ALBUM_SIZE,
                 programId: auctionProgramId,
             }),
         );
         await sendAndConfirmTransaction(connection, transaction, [localKeypair]);
-        await fs.writeFile(AUCTION_DATA_ACCOUNT_KEYPAIR_FILE, dataAccountKey.toString())
+        // await fs.writeFile(AUCTION_DATA_ACCOUNT_KEYPAIR_FILE, dataAccountKey.toString())
     }
 
     let resetInstructions = await createAuctionInstructions(
-        AuctionInstructionCommand.RESET
+        AuctionInstructionCommand.RESET, localKeypair.publicKey
     )
 
     const instruction = new TransactionInstruction({
@@ -132,6 +134,18 @@ export async function resetSimulation() {
         new Transaction().add(instruction),
         [localKeypair],
     );
+
+    console.log(`   Album with seed [\"${seed}\"] reset.`);
+}
+
+
+export async function resetSimulation() {
+    console.log("Resetting auction simulation...");
+    
+    for (var seed of ALBUM_ACCOUNT_SEEDS) {
+        resetAlbum(seed);
+    }
+    
     console.log("Simulation reset.");
 }
 
