@@ -36,7 +36,7 @@ pub fn reset_data(account: &AccountInfo,
         account.key, 
         account.owner,
         &auction_instruction.local_pubkey,
-    );
+    )?;
 
     msg!("Album data:");
     msg!("{:#?}", album);

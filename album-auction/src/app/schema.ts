@@ -72,7 +72,9 @@ export class AuctionInstruction {
 
 export const AuctionInstructionSchema = new Map([
     [AuctionInstruction, {
-        kind: 'struct', fields: [['command', 'u32']]
+        kind: 'struct', fields: [
+            ['command', 'u32'], ['local_pubkey', 'u32']
+        ]
     }],
 ]);
   

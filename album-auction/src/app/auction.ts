@@ -70,14 +70,14 @@ export async function auctionSetup() {
     console.log(`Successfully loaded local account:`);
     console.log(`   ${localKeypair.publicKey}`);
 
-    console.log(`Balance is too low in local account.`);
-    console.log(`Requesting airdrop...`);
-    await connection.confirmTransaction(
-        await connection.requestAirdrop(
-            localKeypair.publicKey,
-            LAMPORTS_PER_SOL,
-        )
-    )
+    // console.log(`Balance is too low in local account.`);
+    // console.log(`Requesting airdrop...`);
+    // await connection.confirmTransaction(
+    //     await connection.requestAirdrop(
+    //         localKeypair.publicKey,
+    //         LAMPORTS_PER_SOL,
+    //     )
+    // )
 
     auctionProgramKeypair = await createKeypairFromFile(
         path.join(
@@ -143,7 +143,7 @@ export async function resetSimulation() {
     console.log("Resetting auction simulation...");
     
     for (var seed of ALBUM_ACCOUNT_SEEDS) {
-        resetAlbum(seed);
+        await resetAlbum(seed);
     }
     
     console.log("Simulation reset.");

@@ -11,6 +11,10 @@ use {
 };
 
 
+pub const ALBUM_ACCOUNT_SEEDS: [&'static str; 4] = [
+    "beatles", "queen", "halen", "acdc"
+];
+
 
 /*
  * Album
@@ -30,59 +34,64 @@ impl Album {
         account_key: &Pubkey, 
         program_id: &Pubkey,
         local_pubkey: &Pubkey,
-    ) -> Result<Album, Error> {
+    ) -> Result<Album, ProgramError> {
         
-        let ALBUM_ACCOUNT_SEEDS = HashMap::from([
-            (String::from("beatles"), 
-                Album {
-                    id: 1, 
-                    title: String::from("Abbey Road"),
-                    artist: String::from("The Beatles"),
-                    winner: program_id.clone(),
-                }
-            ),
-            (String::from("queen"), 
-                Album {
-                    id: 2, 
-                    title: String::from("News of the World"),
-                    artist: String::from("Queen"),
-                    winner: program_id.clone(),
-                }
-            ),
-            (String::from("halen"),
-                Album {
-                    id: 3, 
-                    title: String::from("Van Halen"),
-                    artist: String::from("Van Halen"),
-                    winner: program_id.clone(),
-                }
-            ),
-            (String::from("acdc"),
-                Album {
-                    id: 4, 
-                    title: String::from("Back in Black"),
-                    artist: String::from("AC/DC"),
-                    winner: program_id.clone(),
-                }
-            ),
-        ]);
-        
-        for seed in ALBUM_ACCOUNT_SEEDS.keys() {
+        for seed in ALBUM_ACCOUNT_SEEDS.iter() {
             if Pubkey::create_with_seed(
                 local_pubkey,
                 seed,
                 program_id,
             )?.eq(account_key) {
-                return match ALBUM_ACCOUNT_SEEDS.get(seed) {
-                    Some(album) => album.clone(),
-                    None => Err(ProgramError::InvalidInstructionData),
-                }
+                return Album::get_album_from_seed(seed, *program_id)
             }
         }
         return Err(ProgramError::InvalidInstructionData)
     }
+
+
+    pub fn get_album_from_seed(
+        seed: &str, 
+        program_id: Pubkey
+    ) -> Result<Album, ProgramError> {
+        
+        match seed {
+            "beatles" => {
+                Ok(Album {
+                    id: 1, 
+                    title: String::from("Abbey Road"),
+                    artist: String::from("The Beatles"),
+                    winner: program_id,
+                })
+            },
+            "queen" => {
+                Ok(Album {
+                    id: 2, 
+                    title: String::from("News of the World"),
+                    artist: String::from("Queen"),
+                    winner: program_id,
+                })
+            },
+            "halen" => {
+                Ok(Album {
+                    id: 3, 
+                    title: String::from("Van Halen"),
+                    artist: String::from("Van Halen"),
+                    winner: program_id,
+                })
+            },
+            "acdc" => {
+                Ok(Album {
+                    id: 4, 
+                    title: String::from("Back in Black"),
+                    artist: String::from("AC/DC"),
+                    winner: program_id,
+                })
+            },
+            _ => Err(ProgramError::InvalidInstructionData),
+        }
+    }
 }
-    
+        
 
 /**
  * Auction Instruction
