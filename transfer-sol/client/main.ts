@@ -12,7 +12,7 @@ import {readFileSync} from "fs";
 import path from 'path';
 
 const lo = require("buffer-layout");
-const BN = require("bn.js");
+// const BN = require("bn.js");
 
 
 
@@ -37,7 +37,6 @@ let johnKeypair: Keypair;
  * Helper functions.
  */
 
-
 function createKeypairFromFile(path: string): Keypair {
     return Keypair.fromSecretKey(
         Buffer.from(JSON.parse(readFileSync(path, "utf-8")))
@@ -50,12 +49,10 @@ function createKeypairFromFile(path: string): Keypair {
  * So this looks familiar. We're just hitting our program with the proper instructions.
  */
 async function sendLamports(from: Keypair, to: PublicKey, amount: number) {
-
-    // let amountString = amount.toString();
-    // let amountSize = amountString.length;
     
-    let data = Buffer.alloc(8)
-    lo.ns64("value").encode(new BN(amount), data)
+    let data = Buffer.alloc(8) // 8 bytes
+    // lo.ns64("value").encode(new BN(amount), data);
+    lo.ns64("value").encode(amount, data);
 
     let ins = new TransactionInstruction({
         keys: [

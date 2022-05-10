@@ -15,7 +15,8 @@
         "simulation": "ts-node ./client/main.ts"
     },
     "dependencies": {
-        "@solana/web3.js": "^1.35.1"
+        "@solana/web3.js": "^1.33.0",
+        "buffer-layout": "^1.2.2"
     },
     "devDependencies": {
         "@tsconfig/recommended": "^1.0.1",
