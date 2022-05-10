@@ -1,6 +1,6 @@
 #! /bin/bash
 
-SOLANA_PROGRAMS=("bank_program")
+SOLANA_PROGRAMS=("p2p_program")
 
 case $1 in
     "reset")

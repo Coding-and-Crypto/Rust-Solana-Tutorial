@@ -1,10 +1,2 @@
-example-bank/node_modules/
-example-bank/bank_program/target/
-example-p2p/node_modules/
-example-p2p/p2p_program/target/
-
-
-# --------------------
 node_modules/
-src/auction_program/target/
-src/bank_program/target/
+p2p_program/target/

@@ -1,5 +1,5 @@
 {
-    "name": "example-bank",
+    "name": "transfer-sol",
     "version": "1.0.0",
     "description": "",
     "repository": {
@@ -12,7 +12,7 @@
         "build": "./_cicd/cicd.sh build",
         "deploy": "./_cicd/cicd.sh deploy",
         "reset-and-build": "./_cicd/cicd.sh reset-and-build",
-        "simulation": "ts-node ./src/app/main.ts"
+        "simulation": "ts-node ./app/main.ts"
     },
     "dependencies": {
         "@solana/buffer-layout": "^4.0.0",
