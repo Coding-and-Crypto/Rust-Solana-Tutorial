@@ -9,11 +9,6 @@ import {
   TransactionInstruction,
 } from '@solana/web3.js';
 
-import {
-    createKeypairFromFile,
-    getSendLamportsInstructions,
-} from './util';
-
 import BN from "bn.js";
 import lo from "buffer-layout";
 import {readFileSync} from "fs";
@@ -26,17 +21,16 @@ import path from 'path';
  * Vars
  */
 
- const SOLANA_NETWORK = "devnet";
+const SOLANA_NETWORK = "devnet";
 
- let connection: Connection;
- let localKeypair: Keypair;
- let programKeypair: Keypair;
- let programId: PublicKey;
- 
- let ringoKeypair: PublicKey;
- let georgeKeypair: PublicKey;
- let paulKeypair: PublicKey;
- let johnKeypair: PublicKey;
+let connection: Connection;
+let programKeypair: Keypair;
+let programId: PublicKey;
+
+let ringoKeypair: PublicKey;
+let georgeKeypair: PublicKey;
+let paulKeypair: PublicKey;
+let johnKeypair: PublicKey;
 
 
 
@@ -89,19 +83,6 @@ async function main() {
         `https://api.${SOLANA_NETWORK}.solana.com`, 'confirmed'
     );
 
-    localKeypair = await createKeypairFromFile(
-        await yaml.parse(
-            await fs.readFile(
-                path.resolve(
-                    os.homedir(),
-                    '.config',
-                    'solana',
-                    'cli',
-                    'config.yml',
-                ), {encoding: 'utf8'})
-        ).keypair_path
-    );
-
     programKeypair = await createKeypairFromFile(
         path.join(
             path.resolve(__dirname, '../../dist/program'), 
@@ -134,53 +115,19 @@ async function main() {
     console.log("John sends some SOL to Ringo...");
     console.log(`   John public key: ${johnKeypair.publicKey}`);
     console.log(`   Ringo public key: ${ringoKeypair.publicKey}`);
-    await sendAndConfirmTransaction(
-        connection, 
-        new Transaction().add(
-            getSendLamportsInstructions(
-                johnKeypair,
-                ringoKeypair.publicKey,
-                5000000,
-                programId
-            )
-        ), 
-        [johnKeypair]
-    );
+    await sendLamports(johnKeypair, ringoKeypair.publicKey, 5000000);
 
     // Paul sends some SOL to George.
     console.log("Paul sends some SOL to George...");
     console.log(`   Paul public key: ${paulKeypair.publicKey}`);
     console.log(`   George public key: ${georgeKeypair.publicKey}`);
-    await sendAndConfirmTransaction(
-        connection, 
-        new Transaction().add(
-            getSendLamportsInstructions(
-                paulKeypair,
-                georgeKeypair.publicKey,
-                4000000,
-                programId
-            )
-        ), 
-        [paulKeypair]
-    );
+    await sendLamports(paulKeypair, georgeKeypair.publicKey, 4000000);
 
     // George sends some SOL over to John.
     console.log("George sends some SOL over to John...");
     console.log(`   George public key: ${georgeKeypair.publicKey}`);
     console.log(`   John public key: ${johnKeypair.publicKey}`);
-    await sendAndConfirmTransaction(
-        connection, 
-        new Transaction().add(
-            getSendLamportsInstructions(
-                georgeKeypair,
-                johnKeypair.publicKey,
-                2000000,
-                programId
-            )
-        ), 
-        [georgeKeypair]
-    );
-
+    await sendLamports(georgeKeypair, johnKeypair.publicKey, 2000000);
 }
 
 
