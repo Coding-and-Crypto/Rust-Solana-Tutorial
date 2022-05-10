@@ -14,9 +14,8 @@
         "reset-and-build": "./_cicd/cicd.sh reset-and-build",
         "simulation": "ts-node ./client/main.ts"
     },
-        "dependencies": {
-        "@solana/web3.js": "^1.35.1",
-        "buffer-layout": "^1.2.2"
+    "dependencies": {
+        "@solana/web3.js": "^1.35.1"
     },
     "devDependencies": {
         "@tsconfig/recommended": "^1.0.1",

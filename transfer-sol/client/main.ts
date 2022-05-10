@@ -104,32 +104,32 @@ async function main() {
     await connection.confirmTransaction(
         await connection.requestAirdrop(
             paulKeypair.publicKey,
-            LAMPORTS_PER_SOL*2,
+            LAMPORTS_PER_SOL,
         )
     );
     await connection.confirmTransaction(
         await connection.requestAirdrop(
             johnKeypair.publicKey,
-            LAMPORTS_PER_SOL*2,
+            LAMPORTS_PER_SOL,
         )
     );
 
     // John sends some SOL to Ringo.
     console.log("John sends some SOL to Ringo...");
-    console.log(`   John public key: ${johnKeypair.publicKey}`);
-    console.log(`   Ringo public key: ${ringoKeypair.publicKey}`);
+    console.log(`   John's public key: ${johnKeypair.publicKey}`);
+    console.log(`   Ringo's public key: ${ringoKeypair.publicKey}`);
     await sendLamports(johnKeypair, ringoKeypair.publicKey, 5000000);
 
     // Paul sends some SOL to George.
     console.log("Paul sends some SOL to George...");
-    console.log(`   Paul public key: ${paulKeypair.publicKey}`);
-    console.log(`   George public key: ${georgeKeypair.publicKey}`);
+    console.log(`   Paul's public key: ${paulKeypair.publicKey}`);
+    console.log(`   George's public key: ${georgeKeypair.publicKey}`);
     await sendLamports(paulKeypair, georgeKeypair.publicKey, 4000000);
 
     // George sends some SOL over to John.
     console.log("George sends some SOL over to John...");
-    console.log(`   George public key: ${georgeKeypair.publicKey}`);
-    console.log(`   John public key: ${johnKeypair.publicKey}`);
+    console.log(`   George's public key: ${georgeKeypair.publicKey}`);
+    console.log(`   John's public key: ${johnKeypair.publicKey}`);
     await sendLamports(georgeKeypair, johnKeypair.publicKey, 2000000);
 }
 
