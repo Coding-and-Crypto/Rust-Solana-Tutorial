@@ -1,6 +1,6 @@
 #! /bin/bash
 
-SOLANA_PROGRAMS=("p2p_program")
+SOLANA_PROGRAMS=("program")
 
 case $1 in
     "reset")
@@ -12,18 +12,18 @@ case $1 in
             fi
         done
         for program in "${SOLANA_PROGRAMS[@]}"; do
-            cargo clean --manifest-path=./src/$program/Cargo.toml
+            cargo clean --manifest-path=./$program/Cargo.toml
         done
         rm -rf dist/program
         ;;
     "clean")
         rm -rf ./node_modules
         for program in "${SOLANA_PROGRAMS[@]}"; do
-            cargo clean --manifest-path=./src/$program/Cargo.toml
+            cargo clean --manifest-path=./$program/Cargo.toml
         done;;
     "build")
         for program in "${SOLANA_PROGRAMS[@]}"; do
-            cargo build-bpf --manifest-path=./src/$program/Cargo.toml --bpf-out-dir=./dist/program
+            cargo build-bpf --manifest-path=./$program/Cargo.toml --bpf-out-dir=./_dist/program
         done;;
     "deploy")
         for program in "${SOLANA_PROGRAMS[@]}"; do
@@ -39,8 +39,8 @@ case $1 in
         done
         rm -rf dist/program
         for program in "${SOLANA_PROGRAMS[@]}"; do
-            cargo clean --manifest-path=./src/$program/Cargo.toml
-            cargo build-bpf --manifest-path=./src/$program/Cargo.toml --bpf-out-dir=./dist/program
+            cargo clean --manifest-path=./$program/Cargo.toml
+            cargo build-bpf --manifest-path=./$program/Cargo.toml --bpf-out-dir=./_dist/program
             solana program deploy dist/program/$program.so
         done
         npm install

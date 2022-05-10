@@ -1,2 +1,3 @@
-node_modules/
-p2p_program/target/
+examples/typescript/node_modules/
+examples/rust/node_modules/
+examples/rust/program/target/

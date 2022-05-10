@@ -30,8 +30,8 @@ export async function createAuctionInstructions(
 
     const bufferLayout: BufferLayout.Structure<any> = BufferLayout.struct(
         [
-            BufferLayout.u8('command'),
-            BufferLayout.u8('localPubkey'),
+            BufferLayout.u32('command'),
+            BufferLayout.u32('local_pubkey'),
         ]
     );
 

@@ -1,5 +1,5 @@
 [package]
-name = "p2p_program"
+name = "program"
 version = "0.1.0"
 edition = "2021"
 

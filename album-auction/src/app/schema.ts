@@ -55,7 +55,8 @@ export enum AuctionInstructionCommand {
 
 export class AuctionInstruction {
     command = AuctionInstructionCommand.BID;
-    localPubkey = PublicKey.default;
+    // localPubkey = PublicKey.default;
+    localPubkey = "";
     constructor(
         fields: {
             command: AuctionInstructionCommand,
@@ -65,7 +66,7 @@ export class AuctionInstruction {
     {
         if (fields) {
             this.command = fields.command;
-            this.localPubkey = this.localPubkey;
+            this.localPubkey = this.localPubkey.toString();
         }
     }
 }

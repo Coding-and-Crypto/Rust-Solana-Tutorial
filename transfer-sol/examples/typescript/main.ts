@@ -1,19 +1,18 @@
 import {
-  Connection,
-  Keypair,
-  LAMPORTS_PER_SOL,
-  PublicKey,
-  sendAndConfirmTransaction,
-  SystemProgram,
-  Transaction,
-  TransactionInstruction,
+    Connection,
+    Keypair,
+    LAMPORTS_PER_SOL,
+    PublicKey,
+    sendAndConfirmTransaction,
+    SystemProgram,
+    Transaction,
+    TransactionInstruction,
 } from '@solana/web3.js';
-
-import BN from "bn.js";
-import lo from "buffer-layout";
 import {readFileSync} from "fs";
-import os from 'os';
 import path from 'path';
+
+const lo = require("buffer-layout");
+const BN = require("bn.js");
 
 
 
@@ -27,10 +26,10 @@ let connection: Connection;
 let programKeypair: Keypair;
 let programId: PublicKey;
 
-let ringoKeypair: PublicKey;
-let georgeKeypair: PublicKey;
-let paulKeypair: PublicKey;
-let johnKeypair: PublicKey;
+let ringoKeypair: Keypair;
+let georgeKeypair: Keypair;
+let paulKeypair: Keypair;
+let johnKeypair: Keypair;
 
 
 
@@ -48,11 +47,11 @@ function createKeypairFromFile(path: string): Keypair {
 
 async function sendLamports(from: Keypair, to: PublicKey, amount: number) {
 
-    let amountString = amount.toString();
-    let amountSize = amountString.length;
+    // let amountString = amount.toString();
+    // let amountSize = amountString.length;
     
-    let data = Buffer.alloc(amountSize)
-    lo.ns64("value").encode(new BN(amountString), data)
+    let data = Buffer.alloc(8)
+    lo.ns64("value").encode(new BN(amount), data)
 
     let ins = new TransactionInstruction({
         keys: [
@@ -83,33 +82,33 @@ async function main() {
         `https://api.${SOLANA_NETWORK}.solana.com`, 'confirmed'
     );
 
-    programKeypair = await createKeypairFromFile(
+    programKeypair = createKeypairFromFile(
         path.join(
-            path.resolve(__dirname, '../../dist/program'), 
+            path.resolve(__dirname, '../dist/program'), 
             'p2p_program-keypair.json'
         )
     );
     programId = programKeypair.publicKey;
 
     // Our sample members are Ringo, George, Paul & John.
-    ringoKeypair = await createKeypairFromFile(__dirname + "/../accounts/ringo.json");
-    georgeKeypair = await createKeypairFromFile(__dirname + "/../accounts/george.json");
-    paulKeypair = await createKeypairFromFile(__dirname + "/../accounts/paul.json");
-    johnKeypair = await createKeypairFromFile(__dirname + "/../accounts/john.json");
+    ringoKeypair = createKeypairFromFile(__dirname + "/../accounts/ringo.json");
+    georgeKeypair = createKeypairFromFile(__dirname + "/../accounts/george.json");
+    paulKeypair = createKeypairFromFile(__dirname + "/../accounts/paul.json");
+    johnKeypair = createKeypairFromFile(__dirname + "/../accounts/john.json");
     
     // We'll start by airdropping some lamports to Paul & John.
-    await connection.confirmTransaction(
-        await connection.requestAirdrop(
-            paulKeypair.publicKey,
-            LAMPORTS_PER_SOL*2,
-        )
-    );
-    await connection.confirmTransaction(
-        await connection.requestAirdrop(
-            johnKeypair.publicKey,
-            LAMPORTS_PER_SOL*2,
-        )
-    );
+    // await connection.confirmTransaction(
+    //     await connection.requestAirdrop(
+    //         paulKeypair.publicKey,
+    //         LAMPORTS_PER_SOL*2,
+    //     )
+    // );
+    // await connection.confirmTransaction(
+    //     await connection.requestAirdrop(
+    //         johnKeypair.publicKey,
+    //         LAMPORTS_PER_SOL*2,
+    //     )
+    // );
 
     // John sends some SOL to Ringo.
     console.log("John sends some SOL to Ringo...");

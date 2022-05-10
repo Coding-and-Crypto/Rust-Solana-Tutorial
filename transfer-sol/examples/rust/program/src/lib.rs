@@ -25,8 +25,8 @@ pub fn process_instruction(
 ) -> ProgramResult {
     
     let accounts_iter = &mut accounts.iter();
-    let payer = next_account_info(acc_iter)?;
-    let payee = next_account_info(acc_iter)?;
+    let payer = next_account_info(accounts_iter)?;
+    let payee = next_account_info(accounts_iter)?;
 
     let amount = input
         .get(..8)
@@ -38,7 +38,7 @@ pub fn process_instruction(
 
     msg!("Received request to transfer {:?} lamports from {:?} to {:?}.", 
         amount, payer.key, payee.key);
-    msg!("  Processing transfer...")
+    msg!("  Processing transfer...");
 
     // Transfer from PAYER to PAYEE a specific amount:
     invoke(

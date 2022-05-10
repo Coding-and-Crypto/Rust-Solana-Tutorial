@@ -7,7 +7,9 @@ use {
         account_info::AccountInfo,
         entrypoint::ProgramResult,
         msg,
+        pubkey::Pubkey,
     },
+    std::str::FromStr,
     crate::schema::{
         Album,
         AuctionInstruction,
@@ -35,7 +37,7 @@ pub fn reset_data(account: &AccountInfo,
     album = Album::match_album(
         account.key, 
         account.owner,
-        &auction_instruction.local_pubkey,
+        &Pubkey::from_str(&auction_instruction.local_pubkey).unwrap(),
     )?;
 
     msg!("Album data:");

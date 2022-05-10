@@ -7,7 +7,6 @@ use {
         pubkey::Pubkey,
         program_error::ProgramError,
     },
-    std::collections::HashMap,
 };
 
 
@@ -105,5 +104,5 @@ pub enum AuctionInstructionCommand {
 #[derive(BorshSerialize, BorshDeserialize, Debug)]
 pub struct AuctionInstruction {
     pub command: AuctionInstructionCommand,
-    pub local_pubkey: Pubkey,
+    pub local_pubkey: String,
 }
