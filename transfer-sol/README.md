@@ -1,6 +1,6 @@
 # Transfer Lamports
 
-Two simple examples of transferring lamports (SOL).
+Simple example of transferring lamports (SOL).
 
 ```shell
 examples/typescript     All TypeScript (Solana Web3 API).
@@ -36,3 +36,17 @@ solana airdrop --keypair transfer-sol/accounts/john.json 2
 
 ```shell
 solana account <pubkey> 
+```
+
+## Run the example:
+
+In one terminal:
+```shell
+npm run reset-and-build
+npm run simulation
+```
+
+In another terminal:
+```shell
+solana logs | grep "<program id> invoke" -A 7
+```

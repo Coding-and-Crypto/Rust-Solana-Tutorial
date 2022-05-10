@@ -1,3 +1,1 @@
-examples/typescript/node_modules/
-examples/rust/node_modules/
-examples/rust/program/target/
+node_modules/

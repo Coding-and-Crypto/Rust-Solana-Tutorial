@@ -12,7 +12,7 @@
         "build": "./_cicd/cicd.sh build",
         "deploy": "./_cicd/cicd.sh deploy",
         "reset-and-build": "./_cicd/cicd.sh reset-and-build",
-        "simulation": "ts-node ./p2p_app/main.ts"
+        "simulation": "ts-node ./client/main.ts"
     },
         "dependencies": {
         "@solana/web3.js": "^1.35.1",

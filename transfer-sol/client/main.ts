@@ -45,6 +45,10 @@ function createKeypairFromFile(path: string): Keypair {
 }
 
 
+/**
+ * Here we are sending lamports using the Rust program we wrote.
+ * So this looks familiar. We're just hitting our program with the proper instructions.
+ */
 async function sendLamports(from: Keypair, to: PublicKey, amount: number) {
 
     // let amountString = amount.toString();
@@ -84,8 +88,8 @@ async function main() {
 
     programKeypair = createKeypairFromFile(
         path.join(
-            path.resolve(__dirname, '../dist/program'), 
-            'p2p_program-keypair.json'
+            path.resolve(__dirname, '../_dist/program'), 
+            'program-keypair.json'
         )
     );
     programId = programKeypair.publicKey;
@@ -97,18 +101,18 @@ async function main() {
     johnKeypair = createKeypairFromFile(__dirname + "/../accounts/john.json");
     
     // We'll start by airdropping some lamports to Paul & John.
-    // await connection.confirmTransaction(
-    //     await connection.requestAirdrop(
-    //         paulKeypair.publicKey,
-    //         LAMPORTS_PER_SOL*2,
-    //     )
-    // );
-    // await connection.confirmTransaction(
-    //     await connection.requestAirdrop(
-    //         johnKeypair.publicKey,
-    //         LAMPORTS_PER_SOL*2,
-    //     )
-    // );
+    await connection.confirmTransaction(
+        await connection.requestAirdrop(
+            paulKeypair.publicKey,
+            LAMPORTS_PER_SOL*2,
+        )
+    );
+    await connection.confirmTransaction(
+        await connection.requestAirdrop(
+            johnKeypair.publicKey,
+            LAMPORTS_PER_SOL*2,
+        )
+    );
 
     // John sends some SOL to Ringo.
     console.log("John sends some SOL to Ringo...");
