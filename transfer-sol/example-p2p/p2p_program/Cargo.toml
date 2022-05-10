@@ -3,6 +3,14 @@ name = "p2p_program"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+borsh = "0.9.3"
+borsh-derive = "0.9.1"
+solana-program = "1.10.12"
+
+[dev-dependencies]
+solana-program-test = "1.10.12"
+solana-sdk = "1.10.12"
+
+[lib]
+crate-type = ["cdylib", "lib"]
