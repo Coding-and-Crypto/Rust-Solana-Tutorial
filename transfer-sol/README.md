@@ -1,11 +1,6 @@
-# Transfer Lamports
+# Transfer SOL
 
 Simple example of transferring lamports (SOL).
-
-```shell
-examples/typescript     All TypeScript (Solana Web3 API).
-examples/rust           On-chain Rust program with a triggering client.
-```
 
 ### Creating the example keypairs:
 

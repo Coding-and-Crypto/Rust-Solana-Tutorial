@@ -22,7 +22,12 @@ math-stuff
 advanced-math
 ```
 
-### Tutorials #5 - #6
+### Tutorial #5
 ```
-album-auction
+transfer-sol
+```
+
+### Tutorials #6 - #7
+```
+nft-marketplace
 ```
