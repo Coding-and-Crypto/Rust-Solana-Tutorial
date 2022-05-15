@@ -7,7 +7,7 @@
     "url": "https://github.com/Coding-and-Crypto/Rust-Solana-Tutorial.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "app": "ts-node app/main.ts"
   },
   "dependencies": {
     "@solana/web3.js": "^1.33.0",

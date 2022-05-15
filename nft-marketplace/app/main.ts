@@ -1,14 +1,13 @@
 import {
     Connection,
     Keypair,
-    LAMPORTS_PER_SOL,
     PublicKey,
     sendAndConfirmTransaction,
     SystemProgram,
     Transaction,
     TransactionInstruction,
 } from '@solana/web3.js';
-import {readFileSync} from "fs";
+import { readFileSync } from "fs";
 import path from 'path';
 
 const lo = require("buffer-layout");
@@ -79,8 +78,11 @@ async function processBid(publicKey: PublicKey, name: string, bid: number) {
 async function mintNft(minter: Keypair) {
 
     let ins = new TransactionInstruction({
-        keys: [{pubkey: minter.publicKey, isSigner: false, isWritable: true}],
-        programId: transferProgramKeypair.publicKey,
+        keys: [
+            {pubkey: minter.publicKey, isSigner: false, isWritable: true},
+            {pubkey: SystemProgram.programId, isSigner: false, isWritable: false},
+        ],
+        programId: mintProgramKeypair.publicKey,
         data: Buffer.alloc(0),
     })
 
@@ -94,7 +96,7 @@ async function mintNft(minter: Keypair) {
 
 async function transferNft(owner: Keypair, purchaser: PublicKey, purchaseAmount: number) {
     
-    let data = Buffer.alloc(8) // 8 bytes
+    let data = Buffer.alloc(8)
     lo.ns64("value").encode(purchaseAmount, data);
 
     let ins = new TransactionInstruction({
@@ -127,7 +129,7 @@ async function main() {
     );
     mintProgramKeypair = createKeypairFromFile(
         path.join(
-            path.resolve(__dirname, '../_dist/program'), 
+            path.resolve(__dirname, '../_programs'), 
             'minter-keypair.json'
         )
     );
@@ -156,15 +158,15 @@ async function main() {
     console.log("Bidding has now opened for John's NFT!");
     sleep(2);
 
-    processBid(ringoKeypair.pubkey, "Ringo", 10000000);
+    processBid(ringoKeypair.publicKey, "Ringo", 10000000);
     sleep(1);
-    processBid(georgeKeypair.pubkey, "George", 20000000);
+    processBid(georgeKeypair.publicKey, "George", 20000000);
     sleep(1);
-    processBid(ringoKeypair.pubkey, "Ringo", 40000000);
+    processBid(ringoKeypair.publicKey, "Ringo", 40000000);
     sleep(1);
-    processBid(paulKeypair.pubkey, "Paul", 70000000);
+    processBid(paulKeypair.publicKey, "Paul", 70000000);
     sleep(1);
-    processBid(georgeKeypair.pubkey, "George", 90000000);
+    processBid(georgeKeypair.publicKey, "George", 90000000);
     sleep(1);
 
     console.log("Bidding has closed for John's NFT.");
@@ -175,7 +177,7 @@ async function main() {
     console.log(`Processing transfer of John's NFT to ${highestBidder.name}...`);
     await transferNft(johnKeypair, highestBidder.publicKey, highestBidder.bid);
     console.log("Success.");
-    console.log(`Enjoy your new NFT, ${highestBidder.name}!`);
+    console.log(`   Enjoy your new NFT, ${highestBidder.name}!`);
 }
 
 
@@ -185,4 +187,4 @@ main().then(
         console.error(err);
         process.exit(-1);
     },
-  );
+);

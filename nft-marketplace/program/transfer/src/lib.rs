@@ -12,6 +12,7 @@ use {
         pubkey::Pubkey,
         system_instruction,
     },
+    spl_token::instruction::transfer,
 };
 
 
@@ -27,6 +28,7 @@ pub fn process_instruction(
     let accounts_iter = &mut accounts.iter();
     let purchaser = next_account_info(accounts_iter)?;
     let owner = next_account_info(accounts_iter)?;
+    let token_program = next_account_info(accounts_iter)?;
 
     let purchase_amount = instructions
         .get(..8)
@@ -35,23 +37,31 @@ pub fn process_instruction(
         .ok_or(ProgramError::InvalidInstructionData)?;
 
     msg!("Account {:?} has purchased NFT {:?} from account {:?} for {:?} lamports.", 
-        purchaser.key, token, owner.key, purchase_amount);
+        purchaser.key, token_program.key, owner.key, purchase_amount);
     
+    // Transfer lamports
     msg!("  Processing transfer of {:?} lamports...", purchase_amount);
-    // TODO: Transfer lamports
     invoke(
         &system_instruction::transfer(purchaser.key, owner.key, purchase_amount),
         &[purchaser.clone(), owner.clone()],
     )?;
     msg!("  Success.");
 
-    msg!("  Processing transfer of NFT {:?}...", token);
-    // TODO: NFT mint
+    // Transfer NFT
+    msg!("  Processing transfer of NFT {:?}...", token_program.key);
     invoke(
-        &system_instruction::transfer(payer.key, payee.key, amount),
-        &[payer.clone(), payee.clone()],
+        &spl_token::instruction::transfer(
+            token_program.key, 
+            owner.key, 
+            purchaser.key, 
+            owner.key, 
+            &[owner.key], 
+            1
+        )?,
+        &[purchaser.clone(), owner.clone()],
     )?;
     msg!("  Success.");
+    msg!("  {:?} now owns the NFT.", purchaser.key);
     
     msg!("Transaction completed!");
     Ok(())
