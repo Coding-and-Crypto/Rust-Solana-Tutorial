@@ -1,2 +1,3 @@
 node_modules/
-program/target/
+program/auction/target/
+program/minter/target/
