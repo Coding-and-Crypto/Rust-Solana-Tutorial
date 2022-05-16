@@ -12,7 +12,10 @@ use {
         pubkey::Pubkey,
         system_instruction,
     },
-    spl_token::instruction::transfer,
+    spl_token::{
+        ID,
+        instruction::transfer,
+    },
 };
 
 
@@ -51,7 +54,7 @@ pub fn process_instruction(
     msg!("  Processing transfer of NFT {:?}...", token_program.key);
     invoke(
         &spl_token::instruction::transfer(
-            token_program.key, 
+            &spl_token::ID, 
             owner.key, 
             purchaser.key, 
             owner.key, 

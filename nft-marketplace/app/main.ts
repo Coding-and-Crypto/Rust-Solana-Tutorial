@@ -133,17 +133,18 @@ async function main() {
             'minter-keypair.json'
         )
     );
-    transferProgramKeypair = createKeypairFromFile(
-        path.join(
-            path.resolve(__dirname, '../_programs'), 
-            'transfer-keypair.json'
-        )
-    );
+    // transferProgramKeypair = createKeypairFromFile(
+    //     path.join(
+    //         path.resolve(__dirname, '../_programs'), 
+    //         'transfer-keypair.json'
+    //     )
+    // );
 
     ringoKeypair = createKeypairFromFile(__dirname + "/../_accounts/ringo.json");
     georgeKeypair = createKeypairFromFile(__dirname + "/../_accounts/george.json");
     paulKeypair = createKeypairFromFile(__dirname + "/../_accounts/paul.json");
-    johnKeypair = createKeypairFromFile(__dirname + "/../_accounts/john.json");
+    // johnKeypair = createKeypairFromFile(__dirname + "/../_accounts/john.json");
+    johnKeypair = createKeypairFromFile(__dirname + "/../_accounts/test.json");
 
     console.log("Application initialized.");
     sleep(2);
@@ -175,7 +176,7 @@ async function main() {
     );
     sleep(2);
     console.log(`Processing transfer of John's NFT to ${highestBidder.name}...`);
-    await transferNft(johnKeypair, highestBidder.publicKey, highestBidder.bid);
+    // await transferNft(johnKeypair, highestBidder.publicKey, highestBidder.bid);
     console.log("Success.");
     console.log(`   Enjoy your new NFT, ${highestBidder.name}!`);
 }
