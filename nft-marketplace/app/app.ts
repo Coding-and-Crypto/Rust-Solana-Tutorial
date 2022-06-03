@@ -17,7 +17,7 @@ import {
 // Our NFT details
 
 const nftMetadataUri = "https://raw.githubusercontent.com/Coding-and-Crypto/Rust-Solana-Tutorial/master/nft-marketplace/nft-example.json";
-const nftTitle = "Kermit NFT";
+const nftTitle = "Kermit";
 
 
 // Anchor configs
@@ -26,7 +26,6 @@ const provider = anchor.AnchorProvider.env();
 const wallet = provider.wallet as Wallet;
 anchor.setProvider(provider);
 const program = anchor.workspace.NftMarketplace as Program<NftMarketplace>;
-// TODO: Change?
 const TOKEN_METADATA_PROGRAM_ID = new anchor.web3.PublicKey(
     "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
 );

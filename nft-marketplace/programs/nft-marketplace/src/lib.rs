@@ -52,11 +52,11 @@ declare_id!("HUSrhAUYxgN3pPmm8z4y6y51jkGeZdkVLtKWrCo5aHJU");
 pub mod nft_marketplace {
     use super::*;
 
-    // We'll pass the URI to our MetaData (picture) and the NFT's title into our program when we call it.
+    // We'll pass the URI to our metadata and the NFT's title into our program when we call it.
 
     pub fn mint_nft(
         context: Context<MintNFT>,
-        creator_key: Pubkey,
+        collection_key: Pubkey,
         metadata_uri: String,
         metadata_title: String,
     ) -> Result<()> {
@@ -65,15 +65,15 @@ pub mod nft_marketplace {
 
         // Configure Cross-Program-Invokation (CPI) Context
 
+        let token_program = context.accounts.token_program.to_account_info();
         let token_mint = context.accounts.mint.to_account_info();
         let token_mint_id = token_mint.key;
-        let cpi_accounts = MintTo {
+        let accounts = MintTo {
             mint: token_mint,
             to: context.accounts.token_account.to_account_info(),
             authority: context.accounts.payer.to_account_info(),
         };
-        let cpi_program = context.accounts.token_program.to_account_info();
-        let cpi_context = CpiContext::new(cpi_program, cpi_accounts);
+        let cpi_context = CpiContext::new(token_program, accounts);
         token::mint_to(cpi_context, 1)?;
         msg!("Your NFT has been minted!");
         msg!("  Token ID: {}", token_mint_id);
@@ -82,7 +82,7 @@ pub mod nft_marketplace {
 
         let creator = vec![
             mpl_token_metadata::state::Creator {
-                address: creator_key,
+                address: collection_key,
                 verified: false,
                 share: 100,
             },
