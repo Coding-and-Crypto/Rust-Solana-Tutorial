@@ -1,0 +1,15 @@
+[features]
+seeds = false
+[programs.devnet]
+nft_marketplace = "HUSrhAUYxgN3pPmm8z4y6y51jkGeZdkVLtKWrCo5aHJU"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "devnet"
+wallet = "/home/joec/.config/solana/nft-example.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
+app = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 app/**/*.ts"
