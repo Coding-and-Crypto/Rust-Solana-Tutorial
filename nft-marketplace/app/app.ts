@@ -5,11 +5,11 @@ import {
 } from '@project-serum/anchor';
 import { NftMarketplace } from '../target/types/nft_marketplace';
 import { 
-  TOKEN_PROGRAM_ID, 
-  createAssociatedTokenAccountInstruction, 
-  getAssociatedTokenAddress, 
-  createInitializeMintInstruction, 
-  MINT_SIZE 
+    TOKEN_PROGRAM_ID, 
+    createAssociatedTokenAccountInstruction, 
+    getAssociatedTokenAddress, 
+    createInitializeMintInstruction, 
+    MINT_SIZE 
 } from '@solana/spl-token';
 
 
@@ -17,7 +17,7 @@ import {
 // Our NFT details
 
 const nftMetadataUri = "https://raw.githubusercontent.com/Coding-and-Crypto/Rust-Solana-Tutorial/master/nft-marketplace/nft-example.json";
-const nftTitle = "Kermit";
+const nftTitle = "Rust Crab";
 
 
 // Anchor configs
@@ -36,7 +36,7 @@ async function main() {
     // Create the NFT token & the associated token account that will hold it
 
     const mintKeypair: anchor.web3.Keypair = anchor.web3.Keypair.generate();
-    const NftTokenAccount = await getAssociatedTokenAddress(
+    const nftTokenAccount = await getAssociatedTokenAddress(
         mintKeypair.publicKey,
         wallet.publicKey
     );
@@ -60,7 +60,7 @@ async function main() {
             ),
             createAssociatedTokenAccountInstruction(
                 wallet.publicKey,
-                NftTokenAccount,
+                nftTokenAccount,
                 wallet.publicKey,
                 mintKeypair.publicKey
             )
@@ -96,7 +96,7 @@ async function main() {
     .accounts({
         mintAuthority: wallet.publicKey,
         mint: mintKeypair.publicKey,
-        tokenAccount: NftTokenAccount,
+        tokenAccount: nftTokenAccount,
         tokenProgram: TOKEN_PROGRAM_ID,
         metadata: metadataAddress,
         tokenMetadataProgram: TOKEN_METADATA_PROGRAM_ID,

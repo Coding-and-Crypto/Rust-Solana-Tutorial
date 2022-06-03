@@ -1,14 +1,14 @@
 [features]
 seeds = false
 [programs.devnet]
-nft_marketplace = "HUSrhAUYxgN3pPmm8z4y6y51jkGeZdkVLtKWrCo5aHJU"
+nft_marketplace = "AEHCDXMxQaKMEXECQRAzUjy1ewW6PNnP7KC9uQRzY9jk"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
 cluster = "devnet"
-wallet = "/home/joec/.config/solana/nft-example.json"
+wallet = "/home/joec/.config/solana/nft-marketplace.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

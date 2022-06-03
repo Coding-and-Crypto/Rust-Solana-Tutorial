@@ -45,7 +45,7 @@ pub struct MintNFT<'info> {
 }
 
 
-declare_id!("HUSrhAUYxgN3pPmm8z4y6y51jkGeZdkVLtKWrCo5aHJU");
+declare_id!("AEHCDXMxQaKMEXECQRAzUjy1ewW6PNnP7KC9uQRzY9jk");
 
 
 #[program]
