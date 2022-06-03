@@ -15,11 +15,13 @@ import {
 
 
 // Our NFT details
-const nftMetadataUri = "https://arweave.net/y5e5DJsiwH0s_ayfMwYk-SnrZtVZzHLQDSTZ5dNRUHA";
-const nftTitle = "NFT Test!";
+
+const nftMetadataUri = "https://raw.githubusercontent.com/Coding-and-Crypto/Rust-Solana-Tutorial/master/nft-marketplace/nft-example.json";
+const nftTitle = "Kermit NFT";
 
 
 // Anchor configs
+
 const provider = anchor.AnchorProvider.env();
 const wallet = provider.wallet as Wallet;
 anchor.setProvider(provider);
@@ -87,7 +89,7 @@ async function main() {
         TOKEN_METADATA_PROGRAM_ID
     ))[0];
 
-    const tx = await program.methods.mintNft(
+    await program.methods.mintNft(
         mintKeypair.publicKey,
         nftMetadataUri,
         nftTitle,
