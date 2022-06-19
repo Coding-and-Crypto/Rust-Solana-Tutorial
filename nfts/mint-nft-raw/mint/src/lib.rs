@@ -1,5 +1,4 @@
 use {
-    borsh::{BorshDeserialize, BorshSerialize},
     solana_program::{
         account_info::{next_account_info, AccountInfo}, 
         entrypoint, 
@@ -30,8 +29,6 @@ fn process_instruction(
 
     let accounts_iter = &mut accounts.iter();
 
-    let metadata = next_account_info(accounts_iter)?;
-    let master_edition = next_account_info(accounts_iter)?;
     let mint = next_account_info(accounts_iter)?;
     let token_account = next_account_info(accounts_iter)?;
     let mint_authority = next_account_info(accounts_iter)?;
@@ -39,7 +36,6 @@ fn process_instruction(
     let system_program = next_account_info(accounts_iter)?;
     let token_program = next_account_info(accounts_iter)?;
     let associated_token_program = next_account_info(accounts_iter)?;
-    let token_metadata_program = next_account_info(accounts_iter)?;
     
     msg!("Creating mint account...");
     msg!("Mint: {}", mint.key);

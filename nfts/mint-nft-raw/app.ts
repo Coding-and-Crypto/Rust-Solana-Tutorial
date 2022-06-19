@@ -110,18 +110,6 @@ export async function main() {
 
     const instruction = new TransactionInstruction({
         keys: [
-            // Metadata account
-            {
-                pubkey: metadataAddress,
-                isSigner: false,
-                isWritable: true,
-            },
-            // Master Edition metadata account
-            {
-                pubkey: masterEditionAddress,
-                isSigner: false,
-                isWritable: true,
-            },
             // Mint account
             {
                 pubkey: mintKeypair.publicKey,
@@ -161,12 +149,6 @@ export async function main() {
             // Associated token program
             {
                 pubkey: ASSOCIATED_TOKEN_PROGRAM_ID,
-                isSigner: false,
-                isWritable: false,
-            },
-            // Token metadata program
-            {
-                pubkey: TOKEN_METADATA_PROGRAM_ID,
                 isSigner: false,
                 isWritable: false,
             },
