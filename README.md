@@ -27,7 +27,7 @@ advanced-math
 transfer-sol
 ```
 
-### Tutorials #6 - #7
+### Tutorials #6 - #12
 ```
-nft-marketplace
+nfts
 ```
