@@ -1,0 +1,15 @@
+[features]
+seeds = false
+[programs.devnet]
+mint_nft = "GREPj1wkRt5dh8NeyFa6AuL8fxsiSVk5eMvKBaW9SbQ3"
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "devnet"
+wallet = "/home/joec/.config/solana/id.json"
+
+[scripts]
+test-mint = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/test-mint.ts"
+test-sell = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/test-sell.ts"
