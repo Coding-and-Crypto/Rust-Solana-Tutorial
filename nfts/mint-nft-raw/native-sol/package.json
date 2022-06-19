@@ -12,11 +12,6 @@
     "@solana/buffer-layout": "^4.0.0",
     "@solana/spl-token": "^0.2.0",
     "@solana/web3.js": "^1.44.1",
-    "mz": "^2.7.0",
-    "ts-node": "^10.8.1",
-    "yaml": "^2.1.1"
-  },
-  "devDependencies": {
-    "@types/mz": "^2.7.4"
+    "ts-node": "^10.8.1"
   }
 }

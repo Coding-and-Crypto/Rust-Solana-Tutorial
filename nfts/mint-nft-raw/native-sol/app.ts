@@ -39,10 +39,6 @@ const TOKEN_METADATA_PROGRAM_ID = new PublicKey(
 
 export async function main() {
 
-    const testNftTitle = "Native SOL Test";
-    const testNftSymbol = "NATIVE";
-    const testNftUri = "https://raw.githubusercontent.com/Coding-and-Crypto/Solana-NFT-Marketplace/master/assets/example.json";
-
     const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
     console.log(`Successfully connected to Solana dev net.`);
 
@@ -99,12 +95,12 @@ export async function main() {
             BufferLayout.u32('metadata_uri'),
         ]
     );
-    let instructionBuffer = Buffer.alloc(bufferLayout.span);
+    let buffer = Buffer.alloc(bufferLayout.span);
     bufferLayout.encode({
-        metadata_title: testNftTitle,
-        metadata_symbol: testNftSymbol,
-        metadata_uri: testNftUri,
-    }, instructionBuffer);
+        metadata_title: "Native SOL Test",
+        metadata_symbol: "NATIVE",
+        metadata_uri: "https://raw.githubusercontent.com/Coding-and-Crypto/Solana-NFT-Marketplace/master/assets/example.json",
+    }, buffer);
 
     // Transact with our program
 
@@ -125,7 +121,7 @@ export async function main() {
             // Mint account
             {
                 pubkey: mintKeypair.publicKey,
-                isSigner: true,
+                isSigner: false,
                 isWritable: true,
             },
             // Token account
@@ -139,6 +135,12 @@ export async function main() {
                 pubkey: wallet.publicKey,
                 isSigner: true,
                 isWritable: false,
+            },
+            // Metadata account
+            {
+                pubkey: wallet.publicKey,
+                isSigner: false,
+                isWritable: true,
             },
             // Rent account
             {
@@ -171,13 +173,13 @@ export async function main() {
                 isWritable: false,
             },
         ],
-        programId: programId,
-        data: instructionBuffer,
+        programId,
+        data: buffer,
     })
     await sendAndConfirmTransaction(
         connection,
         new Transaction().add(instruction),
-        [wallet, mintKeypair],
+        [wallet],
     )
 }
 
