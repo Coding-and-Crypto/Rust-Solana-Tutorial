@@ -1,4 +1,3 @@
-import * as BufferLayout from  '@solana/buffer-layout';
 import {
     ASSOCIATED_TOKEN_PROGRAM_ID,
     getAssociatedTokenAddress,
@@ -32,16 +31,8 @@ const CONFIG_FILE_PATH = path.resolve(
     'config.yml',
 );
 
-const TOKEN_METADATA_PROGRAM_ID = new PublicKey(
-    "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
-  );
-
 
 export async function main() {
-
-    const testNftTitle = "Native SOL Test";
-    const testNftSymbol = "NATIVE";
-    const testNftUri = "https://raw.githubusercontent.com/Coding-and-Crypto/Solana-NFT-Marketplace/master/assets/example.json";
 
     const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
     console.log(`Successfully connected to Solana dev net.`);
@@ -67,44 +58,6 @@ export async function main() {
       wallet.publicKey
     );
     console.log(`New token: ${mintKeypair.publicKey}`);
-
-    // Derive the metadata and master edition addresses
-
-    const metadataAddress = (await PublicKey.findProgramAddress(
-        [
-          Buffer.from("metadata"),
-          TOKEN_METADATA_PROGRAM_ID.toBuffer(),
-          mintKeypair.publicKey.toBuffer(),
-        ],
-        TOKEN_METADATA_PROGRAM_ID
-      ))[0];
-      console.log("Metadata initialized");
-      const masterEditionAddress = (await PublicKey.findProgramAddress(
-        [
-          Buffer.from("metadata"),
-          TOKEN_METADATA_PROGRAM_ID.toBuffer(),
-          mintKeypair.publicKey.toBuffer(),
-          Buffer.from("edition"),
-        ],
-        TOKEN_METADATA_PROGRAM_ID
-      ))[0];
-      console.log("Master edition metadata initialized");
-
-    // Create the instruction struct
-
-    let bufferLayout: BufferLayout.Structure<any> = BufferLayout.struct(
-        [
-            BufferLayout.u32('metadata_title'),
-            BufferLayout.u32('metadata_symbol'),
-            BufferLayout.u32('metadata_uri'),
-        ]
-    );
-    let instructionBuffer = Buffer.alloc(bufferLayout.span);
-    bufferLayout.encode({
-        metadata_title: testNftTitle,
-        metadata_symbol: testNftSymbol,
-        metadata_uri: testNftUri,
-    }, instructionBuffer);
 
     // Transact with our program
 
@@ -154,7 +107,7 @@ export async function main() {
             },
         ],
         programId: programId,
-        data: instructionBuffer,
+        data: Buffer.alloc(0),
     })
     await sendAndConfirmTransaction(
         connection,
