@@ -14,3 +14,4 @@ We use Anchor - both for the client-side and on-chain code - in each example in 
 
 ## How NFTs Work
 ![](how_nfts_work.jpg)
+![](nfts_more_detail.jpg)
