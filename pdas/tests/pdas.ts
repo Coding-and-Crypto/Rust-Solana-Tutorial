@@ -9,13 +9,10 @@ function shortKey(key: anchor.web3.PublicKey) {
 
 
 describe("pdas", () => {
-
-  const colorSet = new Set<string>();
   
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
   const program = anchor.workspace.Pdas as anchor.Program<Pdas>;
-
 
   async function generateKeypair() {
     let keypair = anchor.web3.Keypair.generate();
@@ -39,7 +36,11 @@ describe("pdas", () => {
     return pda;
   }
 
-  async function createLedgerAccount(color: string, pda: anchor.web3.PublicKey, wallet: anchor.web3.Keypair) {
+  async function createLedgerAccount(
+    color: string, 
+    pda: anchor.web3.PublicKey, 
+    wallet: anchor.web3.Keypair
+  ) {
     await program.methods.createLedger(color)
       .accounts({
         ledgerAccount: pda,
@@ -89,7 +90,6 @@ describe("pdas", () => {
     console.log("New Data:")
     console.log(`    Color: ${data.color}   Balance: ${data.balance}`);
     console.log("Success.");
-    colorSet.add(color);
   }
 
 
